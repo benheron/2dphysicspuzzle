@@ -1,0 +1,6 @@
+2
+ts TitleScreen res/audio/music/Funkorama.wav
+ps Ingame res/audio/music/ShavingMirror.wav
+1
+1 OptionSelect res/audio/sfx/optionselect2.wav
+

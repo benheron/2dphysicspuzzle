@@ -1,0 +1,13 @@
+res/img/ladder.png
+ladder
+32
+32
+0
+
+//Comments:
+//filepath
+//Name
+//width per frame
+//height per frame
+//Attributes:
+//mass
