@@ -6,10 +6,42 @@
 #include "../entities/creatures/Creature.h"
 #include <Vector>
 
-struct ItemData {
+
+
+struct ObjectsData {
 	std::string ID;
 	Vec2 pos;
 };
+
+struct ItemData {
+	std::string ID;
+	std::string instanceID;
+	Vec2 pos;
+};
+
+struct DoorData {
+	std::string ID;
+	std::string instanceID;
+	Vec2 pos;
+	bool activated;
+};
+
+struct MovPlatData {
+	std::string ID;
+	std::string instanceID;
+	Vec2 pos;
+	Vec2 endPos;
+	int speed;
+	bool activated;
+	bool reversing;
+};
+
+struct PadSwitchdata {
+	std::string ID;
+	Vec2 pos;
+	std::string linkedItemID;
+};
+
 /**
 @brief Contains all the data for the map templates
 */
@@ -21,14 +53,14 @@ public:
 	@param mapTiles The Tiles in the Map.
 	@param layerIDs The list of the layer ID's.
 	*/
-	RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<Tile*>>> mapTiles, std::vector<Creature*> mapCreatures, std::vector<std::string> layerIDs, Vec2 spawnPoint);
+//	RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<Tile*>>> mapTiles, std::vector<Creature*> mapCreatures, std::vector<std::string> layerIDs, Vec2 spawnPoint);
 
 
 
-	RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<std::string>>> mapTilesData, std::vector<std::string> roomCreaturesData, std::vector<std::string> layerIDs, std::vector<ItemData> itemDataSeries );
+	RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<std::string>>> mapTilesData, std::vector<std::string> roomCreaturesData, std::vector<std::string> layerIDs, std::vector<ItemData> itemDataSeries, std::vector<MovPlatData> movPlatDataSeries, std::vector<PadSwitchdata> padSwitchDataSeries, std::vector<DoorData> doorDataSeries, std::vector<ObjectsData> physicsObjectDataSeries, std::vector<ObjectsData> creatureObjectDataSeries, Vec2 playerPos);
 
 
-	RoomTemplate::RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<Tile*>>> mapTiles, std::vector<Creature*> mapCreatures, std::vector<std::string> layerIDs, Vec2 spawnPoint, Vec2 mapPos);
+	//RoomTemplate::RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<Tile*>>> mapTiles, std::vector<Creature*> mapCreatures, std::vector<std::string> layerIDs, Vec2 spawnPoint, Vec2 mapPos);
 
 
 
@@ -77,6 +109,15 @@ public:
 
 	std::vector<ItemData> getItemData();
 
+	std::vector<MovPlatData> getMovPlatData();
+	std::vector<PadSwitchdata> getPadSwitchdata();
+	std::vector<ObjectsData> getPhysicsObjectData();
+	std::vector<DoorData> getDoorData();
+
+	Vec2 getPlayerSpawn();
+
+	std::vector<ObjectsData> getCreaturesObjectData();
+
 private:
 	///A vector to hold all of the layer IDs.
 	std::vector<std::string> layerIDs;
@@ -117,6 +158,11 @@ private:
 	std::vector<std::string> roomCreaturesData;
 
 	std::vector<ItemData> itemDataSeries;
+	std::vector<MovPlatData> movPlatDataSeries;
+	std::vector<PadSwitchdata> padSwitchDataSeries;
+	std::vector<DoorData> doorDataSeries;
+	std::vector<ObjectsData> physicsObjectDataSeries;
+	std::vector<ObjectsData> creatureObjectDataSeries;
 
-
+	Vec2 playerPos;
 };

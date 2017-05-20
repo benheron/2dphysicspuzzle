@@ -9,6 +9,8 @@
 #include "Character.h"
 #include "CreatureType.h"
 #include "Creature.h"
+#include "../../Animation.h"
+#include "../../Frame.h"
 
 /**
 @brief Contains all the data and functions to manage the Creatures
@@ -44,6 +46,9 @@ private:
 
 	///An unordered map of the different characters
 	std::unordered_map<std::string, CharacterType*> characterTypes;
+
+
+	//std::unordered_map<std::string, Animation*> animations;
 
 	/**
 	@brief Loads the creature data

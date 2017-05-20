@@ -6,6 +6,7 @@
 #include "entities/shapes/Square.h"
 #include "entities/shapes/Circle.h"
 #include <math.h>
+#include <cmath>
 #include <algorithm>  
 
 
@@ -17,8 +18,8 @@ struct Manifold {
 };
 
 struct ManifoldTile {
-	Tile *A;
-	Entity *B;
+	Entity *A;
+	Tile *B;
 	float penetration;
 	Vec2 normal;
 };
@@ -69,6 +70,12 @@ namespace Collision
 	void correctPositions(Manifold *m);
 
 	float pythagorus(float a, float b);
+
+	float findAngleRad(Vec2 v);
+
+	float findAngleDeg(Vec2 v);
+
+	const float PI = 3.14159265359;
 
 }
 

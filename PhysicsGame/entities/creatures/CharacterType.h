@@ -3,13 +3,14 @@
 #include "../../Vec2.h"
 #include "../../Texture.h"
 #include "../../Utility.h"
-
+#include "../../Animation.h"
+#include "../../Frame.h"
 
 class CharacterType
 {
 public:
 	CharacterType(Texture* spritesheet, std::string ID, std::string creatureName, Vec2 spriteDimensions,
-		float weight, float speed, float maxSpeed, float strength, float maxHealth);
+		float weight, float speed, float maxSpeed, float strength, float maxHealth, std::unordered_map<std::string, Animation*> animations);
 	~CharacterType();
 
 	/**
@@ -20,7 +21,7 @@ public:
 	@param state The state this character is in
 	@param frame The frame of the state this character is in
 	*/
-	void render(SDL_Renderer *renderer, Vec2 pos, Vec2 dimensions, int state, int frame);
+	void render(SDL_Renderer *renderer, Vec2 pos, Vec2 dimensions, std::string newState, bool addFrame, Vec2 scale);
 
 	/**
 	@brief Gets a pointer to the TileType Texture.
@@ -70,6 +71,8 @@ public:
 	*/
 	float getMaxHealth();
 
+	Vec2 getSpriteStateDimensions(std::string ssd);
+
 protected:
 	///A pointer to the spritesheet.
 	Texture* spritesheet;
@@ -97,5 +100,14 @@ protected:
 
 	///The number of hitpoints this character starts off with
 	float maxHealth;
+
+	int frame = 0;
+	int numFrames;
+
+	std::string lastState;
+	std::string state;
+
+
+	std::unordered_map<std::string, Animation*> animations;
 };
 

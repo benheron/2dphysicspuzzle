@@ -1,6 +1,6 @@
-1
-A0 res/txt/creatures/enemies/grunt.txt
-
+2
+GR res/txt/creatures/enemies/grunt.txt
+SE res/txt/creatures/enemies/sentinel.txt
 
 //No. of creatures
 //ID, Filename1

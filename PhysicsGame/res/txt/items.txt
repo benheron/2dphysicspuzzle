@@ -1,4 +1,8 @@
-3
-II0 res/txt/items/interactable/pressurepad.txt
-II1 res/txt/items/interactable/mapexit.txt
-II2 res/txt/items/interactable/ladder.txt
+7
+PP res/txt/items/interactable/pressurepad.txt
+IS res/txt/items/interactable/itemswitch.txt
+ME res/txt/items/interactable/mapexit.txt
+DR res/txt/items/scenery/door.txt
+MP res/txt/items/scenery/movingplatform.txt
+SQ res/txt/items/physics/square.txt
+CI res/txt/items/physics/circle.txt

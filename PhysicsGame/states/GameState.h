@@ -26,6 +26,14 @@
 
 #include "../Raycast.h"
 
+#include "../entities/MovingPlatform.h"
+#include "../entities/items/Door.h"
+#include "../entities/items/ItemSwitch.h"
+
+#include "../entities/creatures/Sentinel.h"
+
+#include "OnDeathState.h"
+
 //#include "..entities/creatures/Character.h"
 
 /**
@@ -128,25 +136,6 @@ protected:
 	HealthIcon *health;
 
 
-	Texture *circleTexture;
-	Texture *squareTexture;
-
-
-
-
-	Square *box;
-	Square *box2;
-	Square *box3;
-	Square *box4;
-	Square *box5;
-	Square *box6;
-
-	Circle *circ;
-	Circle *circ2;
-	Circle *circ3;
-	Circle *circ4;
-	Circle *circ5;
-
 	std::vector<Square*> squares;
 	std::vector<Circle*> circles;
 
@@ -157,12 +146,8 @@ protected:
 
 	LevelStopwatch *levelTime;
 
-	Texture *pressPadB;
-	Texture *pressPadT;
+	
 
-	Texture *pressPad;
-
-	PressurePad *pp1;
 
 	MapExit *exitm;
 
@@ -194,4 +179,21 @@ protected:
 	Manifold *m = new Manifold();
 
 	Character *player;
+
+
+
+	bool lDown = false;
+	bool downCheck;
+	bool lUp;
+
+	bool debugInfo = false;
+
+	Texture *red;
+	float throwStrength;
+
+	Texture* backgroundTexture;
+	
+	bool retry = false;
+
+	float playerDeadTime = 0;
 };

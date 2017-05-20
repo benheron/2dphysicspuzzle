@@ -31,7 +31,7 @@ void Circle::buildCircle()
 
 void Circle::update(float dt) 
 {
-	Body::update(dt);
+	//Body::update(dt);
 	
 
 }

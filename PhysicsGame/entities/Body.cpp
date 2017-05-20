@@ -1,5 +1,9 @@
 #include "Body.h"
 
+Body::Body(Vec2 pos, Vec2 dimensions) : Entity(pos, dimensions)
+{
+
+}
 
 Body::Body(Texture* texture, Vec2 pos) : Entity(texture, pos)
 {

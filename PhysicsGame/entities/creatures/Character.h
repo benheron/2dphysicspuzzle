@@ -2,6 +2,7 @@
 
 #include "../Entity.h"
 #include "CharacterType.h"
+#include "../MovingPlatform.h"
 
 /**
 @brief Creates all data for the character
@@ -104,15 +105,65 @@ public:
 	@return true if can hit false if not
 	*/
 	bool canDamage();
+
+
+	void setClimbing(bool c);
+	bool getClimbing();
+
+
+	void setOnFloor(bool of);
+	bool getOnFloor();
+
+	void setKeyMove(bool km);
+	bool getKeyMove();
+
+	void setKeyMoveRight();
+	//bool getKeyMoveRight();
+
+	void setKeyMoveLeft();
+	//bool getKeyMoveLeft();
+
+
+	void setLocalVelocity(Vec2 lv);
+	Vec2 getLocalVelocity();
+
+	void jump();
+
+	void moveRight(float dt);
+	void moveLeft(float dt);
+
+	void setOnMovingPlatform(bool b);
+	void setOnMovingPlatform(bool b, MovingPlatform* mp);
+	bool getOnMovingPlatform();
+
+	void setOnEntity(Entity *e);
+
+
+	void setCanJump(bool cj);
+	bool getCanJump();
+
+	void setCanClimb(bool cc);
+	bool getCanClimb();
+
+	void setAlive(bool a);
+
+	bool getAlive();
+
 private:
 	///Reference to CharacterType
 	CharacterType *characterType;
 
 	Vec2 lastPos = Vec2(0);
 
+	Vec2 localVelocity;
+
 	///The health of the character
 	int health = 3;
 
+	///timer value
+	float timer;
+
+	float jumpTimer;
 
 	///if the character has been hit
 	bool hit = false;
@@ -120,7 +171,63 @@ private:
 	///if the character can currently be damaged
 	bool canDmg = true;
 
+	//if the player is climbing or not
+	bool climbing;
 
-	///timer value
-	float timer;
+
+
+	bool onFloor;
+
+	bool keyMove;
+	bool keyMoveRight;
+	bool keyMoveLeft;
+
+	float frameTiming = 0;
+	float frameSecond;
+
+	enum PlayerState {
+		idleState,
+		movingState,
+		jumpingState,
+		climbingState,
+		deadState
+	};
+
+	enum Direction {
+		leftDir,
+		rightDir
+	};
+
+	Direction playerDir;
+
+	PlayerState pState;
+	PlayerState lastState;
+
+	bool addFrame = false;
+
+	Vec2 spriteScale;
+
+
+	Vec2 relVel;
+
+	int localMaxSpeedX = 70;
+	int localMaxSpeedY = 400;
+
+	int speed;
+	float airSpeed;
+	
+	int maxSpeedX = 400;
+	int maxSpeedY = 400;
+
+
+
+	bool onMovPlatform;
+	MovingPlatform *platformOn;
+
+	bool canJump;
+	bool canClimb;
+
+	Entity* entityOn = NULL;
+
+	bool alive;
 };

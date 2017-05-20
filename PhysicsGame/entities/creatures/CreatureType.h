@@ -3,6 +3,7 @@
 #include "../../Vec2.h"
 #include "../../Texture.h"
 #include "../../Utility.h"
+#include "../../Animation.h"
 
 /**
 @brief Creates a CreatureType object
@@ -23,7 +24,7 @@ public:
 	@param maxHealth The number of hitpoints this creature starts off with
 	*/
 	CreatureType(Texture* spritesheet, std::string ID, std::string creatureName, Vec2 spriteDimensions,
-		float weight, float speed, float maxSpeed, float strength, float maxHealth);
+		float weight, float speed, float maxSpeed, float strength, float maxHealth, std::unordered_map<std::string, Animation*> animations);
 	~CreatureType();
 
 	/**
@@ -34,7 +35,7 @@ public:
 	@param state The state this creature is in
 	@param frame The frame of the state this creature is in
 	*/
-	void render(SDL_Renderer *renderer, Vec2 pos, Vec2 dimensions, int state, int frame);
+	void render(SDL_Renderer *renderer, Vec2 pos, Vec2 dimensions, std::string newState, bool addFrame, Vec2 scale);
 
 	/**
 	@brief Gets a pointer to the TileType Texture.
@@ -112,7 +113,12 @@ protected:
 	///The number of hitpoints this creature starts off with
 	float maxHealth;
 
-	
+	std::unordered_map<std::string, Animation*> animations;
 
+	int frame = 0;
+	int numFrames;
+
+	std::string lastState;
+	std::string state;
 
 };

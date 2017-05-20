@@ -61,7 +61,7 @@ public:
 	void setMoveTowardPos(Vec2 p);
 
 
-private:
+protected:
 	///Reference to CreatureType
 	CreatureType *creatureType;
 

@@ -24,7 +24,7 @@ public:
 	@param tileTypeManager* A pointer to the TileTypeManager.
 	@param creatureManager A pointer to the CreatureManager
 	*/
-	MapManager(std::string filePath, TileTypeManager* tileTypeManager, CreatureManager* creatureManager, int type);
+	MapManager(std::string filePath, TileTypeManager* tileTypeManager, CreatureManager* creatureManager, int type, SDL_Renderer *renderer);
 
 	/**
 	@brief MapManager destructor.
@@ -36,7 +36,7 @@ public:
 	@param filePath The path to the file which holds the map data.
 	@param tileTypeManager* A pointer to the TileTypeManager.
 	*/
-	bool loadMapData(std::string filePath, TileTypeManager* tileTypeManager, CreatureManager* creatureManager);
+	bool loadMapData(std::string filePath, TileTypeManager* tileTypeManager, CreatureManager* creatureManager, SDL_Renderer *renderer);
 
 	/**
 	@brief Gets the Map data.
@@ -57,6 +57,8 @@ public:
 
 	int getNumberMaps();
 
+	Texture* getLevelIcon(std::string id);
+
 private:
 
 
@@ -70,6 +72,10 @@ private:
 	std::vector<RoomTemplate*> rMaps;
 
 	std::vector<Vec2> roomPositions;
+
+	std::vector<Texture*> levelIcons;
+
+	std::unordered_map<std::string, Texture*> levelIconsUM;
 
 
 };

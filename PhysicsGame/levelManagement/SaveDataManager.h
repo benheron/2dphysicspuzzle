@@ -27,7 +27,7 @@ public:
 	@brief Creates the SaveDataManager to load in the Map files
 	@param filePath The path to the file which holds the initial map data.
 	*/
-	SaveDataManager(std::string filePath, MapManager *mmng);
+	SaveDataManager(std::string filePath, MapManager *mmng, SDL_Renderer *renderer);
 
 	/**
 	@brief SaveDataManager destructor.
@@ -46,12 +46,20 @@ public:
 	Level* getLevelFromID(std::string ID);
 
 
-	int getNumberLevels();
+	int getNumLevels();
+
+	std::vector<std::string> getTheLevelIDs();
+
+	Texture* getLevelIconFromID(std::string ID);
 
 private:
 	std::unordered_map<std::string, Level*> levelsID;
+	std::unordered_map<std::string, Texture*> iconTexturesID;
 	std::vector<Level*> levelsString;
+	std::vector<std::string> theLevelIDs;
 
+
+	Texture *defaultImage;
 	int numLevels;
 
 

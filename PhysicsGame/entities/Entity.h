@@ -112,9 +112,14 @@ public:
 	void setGravityOn(bool g);
 	bool isGravityOn();
 
-	std::string getID();
+	//std::string getID();
 
 	float getBounciness();
+
+	void setApplyFriction(bool af);
+	bool getApplyFriction();
+
+
 
 	Vec2 velocity = Vec2(0, 0);
 
@@ -162,7 +167,7 @@ protected:
 
 	float bounciness = 0;
 
-	
-	
+	bool applyFriction = true;
+
 
 };

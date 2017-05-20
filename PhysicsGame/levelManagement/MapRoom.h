@@ -12,9 +12,18 @@
 #include "../Collision.h"
 
 #include "../entities/Entity.h"
+
 #include "../entities/PressurePad.h"
 #include "../Raycast.h"
 #include "../entities/MapExit.h"
+#include "../entities/MovingPlatformWithEnds.h"
+#include "../entities/items/Door.h"
+#include "../entities/items/ItemSwitch.h"
+
+#include "../AssetManager.h"
+
+#include "../entities/creatures/Grunt.h"
+#include "../entities/creatures/Sentinel.h"
 
 /**
 @brief Contains the data for a single room on the map
@@ -37,7 +46,7 @@ public:
 	*/
 	MapRoom(MapManager *mpmng, Vec2 pos, int e, int index);
 
-	MapRoom(MapManager *mpmng, TileTypeManager *ttmng, CreatureManager *cmng, ItemManager *imng, std::string id);
+	MapRoom(MapManager *mpmng, TileTypeManager *ttmng, CreatureManager *cmng, ItemManager *imng, AssetManager *a, std::string id);
 
 
 	/**
@@ -133,17 +142,28 @@ public:
 
 
 
-	int checkCollideM(Manifold *m);
+	int checkCollideM(ManifoldTile *m);
 
 	int checkCollideM2(Manifold *m);
 
-	int checkCollideM3(Manifold *m);
+	int checkCollideM3(ManifoldTile *m);
+
+	int checkCollideM4(ManifoldTile *m);
+
+	int checkCollidePlayerTile(Character *player);
 
 	bool lineOfSight(Entity *e);
 
 
 	bool getLevelComplete();
-	
+
+	void renderDebug(SDL_Renderer *renderer, Texture *red);
+
+	Character* getPlayer();
+	std::vector<Square*> getSquares();
+	std::vector<Circle*> getCircles();
+
+	bool tileDebug;
 
 private:
 
@@ -158,6 +178,31 @@ private:
 	std::vector<std::string> roomCreatureStrings;
 
 	std::vector<ItemData> roomItemDataSeries;
+	std::vector<MovPlatData> roomMovPlatDataSeries;
+	std::vector<PadSwitchdata> roomPadSwitchDataSeries;
+	std::vector<DoorData> doorDataSeries;
+	std::vector<ObjectsData> roomPhysicsObjectDataSeries;
+	std::vector<ObjectsData> creatureObjectDataSeries;
+
+	std::unordered_map<std::string, ActivatableItem*> roomActItemUM;
+
+
+	std::vector<PressurePad*> roomPressurePads;
+	std::vector<ItemSwitch*> roomItemSwitches;
+	std::vector<Door*> roomDoors;
+	//std::vector<MovingPlatform*> roomMovePlats;
+
+	std::vector<MovingPlatformWithEnds*> roomMovePlats;
+
+	std::vector<Square*> squares;
+	std::vector<Circle*> circles;
+
+	std::vector<Grunt*> grunts;
+	std::vector<Sentinel*> sentinels;
+
+	Vec2 playerSpawn;
+
+	MapExit *me;
 
 	//An unordered map that contains all of the creatures. [Layer ID][Y Index][X Index]
 	//std::unordered_map<std::string, Creature*> mapCreatures;
@@ -165,6 +210,8 @@ private:
 	///A vector of all creatures
 	std::vector<Creature*> roomCreatures;
 
+	
+	Square *jumphitbox;
 
 
 	///A 2D vector storing the spawn point of the player
@@ -191,10 +238,9 @@ private:
 	TileTypeManager *ttm;
 
 
-	Manifold *m;
-	PressurePad *pp;
-	MapExit *me;
-
 	bool levelComplete = false;
+
+
+	AssetManager *asmng;
 
 };

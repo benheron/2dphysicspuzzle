@@ -1,11 +1,11 @@
 #pragma once
-#include "../Entity.h"
+#include "../Body.h"
 #include "SDL_ttf.h"
 
 /**
 @brief Creates all data for the Square
 */
-class Square : public Entity
+class Square : public Body
 {
 public:
 
@@ -91,7 +91,7 @@ protected:
 
 	float radius;
 
-
+	Vec2 spawnPoint;
 
 
 

@@ -16,7 +16,7 @@
 
 #include "../entities/Button.h"
 
-#include "../UI/LevelIcon.h"
+#include "../UI/LevelGrid.h"
 
 
 
@@ -74,14 +74,7 @@ protected:
 
 	DataManager *dtmng;
 
-	///local reference to the tile type manager
-	TileTypeManager *ttmng;
-
-	///local reference to the creature manager
-	CreatureManager *cmng;
-
-	///local reference to the map manager
-	MapManager *mmng;
+	
 
 	PauseMenuState *pms;
 
@@ -91,8 +84,12 @@ protected:
 
 	std::vector<LevelIcon*> levelIcons;
 
+	LevelGrid *levelGrid;
+
 
 	Texture *white;
+
+	Texture* chooseStateTex;
 
 	Texture *levTex1;
 	Texture *levTex2;

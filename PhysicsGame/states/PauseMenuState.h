@@ -70,10 +70,7 @@ protected:
 
 	bool leftDown = false;
 
-	TileTypeManager *ttmng;
-	CreatureManager *cmng;
-	MapManager *mmng;
-	PauseMenuState *pms;
+
 
 	DataManager *dtmng;
 
@@ -89,4 +86,6 @@ protected:
 	Texture *mnubg;
 
 	std::vector<Button*> pauseMenuButtons;
+
+	Vec2 mousePos;
 };

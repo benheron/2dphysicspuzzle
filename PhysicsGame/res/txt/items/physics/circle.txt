@@ -1,0 +1,13 @@
+res/img/circle.png
+circle
+32
+32
+0.6
+
+//Comments:
+//filepath
+//Name
+//width per frame
+//height per frame
+//Attributes:
+//mass

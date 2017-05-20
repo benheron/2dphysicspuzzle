@@ -1,34 +1,38 @@
 #include "Square.h"
 
 
-Square::Square(Vec2 pos, Vec2 dimensions) : Entity(pos, dimensions)
+Square::Square(Vec2 pos, Vec2 dimensions) : Body(pos, dimensions)
 {
 	spritePos = 0;
-	bounciness = 0.5;
+	bounciness = 0.1;
 	staticFriction = 0.4;
 	dynamicFriction = 0.2;
 	mass = 0.5;
+
+	
 }
 
-Square::Square(Texture* texture, Vec2 pos) : Entity(texture, pos)
+Square::Square(Texture* texture, Vec2 pos) : Body(texture, pos)
 {
-	bounciness = 0.5;
+	bounciness = 0.1;
 	staticFriction = 0.4;
 	dynamicFriction = 0.2;
 	mass = 0.5;
 }
 
-Square::Square(Texture* texture, Vec2 pos, Vec2 dimensions) : Entity(texture, pos, dimensions)
+Square::Square(Texture* texture, Vec2 pos, Vec2 dimensions) : Body(texture, pos, dimensions)
 {
 	spritePos = 0;
-	bounciness = 0.5;
-	staticFriction = 0.4;
-	dynamicFriction = 0.2;
+	bounciness = 0.1;
+	staticFriction = 0.5;
+	dynamicFriction = 0.4;
 	mass = 0.5;
+
+	spawnPoint = pos;
 }
 
 
-Square::Square(Texture* texture, Vec2 pos, Vec2 dimensions, Vec2 spritePos) : Entity(texture, pos, dimensions, spritePos)
+Square::Square(Texture* texture, Vec2 pos, Vec2 dimensions, Vec2 spritePos) : Body(texture, pos, dimensions, spritePos)
 {
 
 }
@@ -49,7 +53,7 @@ void Square::update(float dt)
 	if (gravityOn)
 	{
 		float accY = 0;
-		accY += 200;
+		accY += 300;
 
 
 		velocity.y += accY *dt;
@@ -90,6 +94,11 @@ void Square::update(float dt)
 	
 	pos += velocity * dt;
 
+	if (pos.y > 540)
+	{
+		pos = spawnPoint;
+		velocity = 0;
+	}
 
 
 

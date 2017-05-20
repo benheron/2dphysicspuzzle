@@ -32,6 +32,10 @@ bool ChooseLevelState::eventHandler()
 		case SDL_MOUSEMOTION:
 			//while mouse is moving
 			
+			if (levelGrid->iconSelect(mousePos) == 2)
+			{
+				dtmng->getAudioManager()->getSFXByName("OptionSelect")->playAudio(0);
+			}
 
 
 			//buttons
@@ -52,7 +56,7 @@ bool ChooseLevelState::eventHandler()
 
 			break;
 		case SDL_QUIT:
-			return true;
+			//return true;
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
@@ -63,7 +67,7 @@ bool ChooseLevelState::eventHandler()
 				//left click
 			case SDL_BUTTON_LEFT:
 				//buttons
-				for (int i = 0; i < levelButtons.size(); i++)
+				/*for (int i = 0; i < levelButtons.size(); i++)
 				{
 					if (Collision::pointBoxCollision(mousePos, levelButtons[i]))
 					{
@@ -73,16 +77,26 @@ bool ChooseLevelState::eventHandler()
 							playLevel = true;
 						}
 					}
+				}*/
+
+				if (Collision::pointBoxCollision(mousePos, levelGrid))
+				{
+					levelToPlay = levelGrid->getLevelToPlay(mousePos);
+
+					if (levelToPlay != "No Level")
+					{
+						playLevel = true;
+					}
 				}
 
-				for (int i = 0; i < levelIcons.size(); i++)
+				/*for (int i = 0; i < levelIcons.size(); i++)
 				{
 					if (Collision::pointBoxCollision(mousePos, levelIcons[i]))
 					{
 						playLevel = true;
 						levelToPlay = levelIcons[i]->getLevelID();
 					}
-				}
+				}*/
 				
 
 				break;
@@ -106,6 +120,7 @@ bool ChooseLevelState::eventHandler()
 			case SDLK_ESCAPE:
 				//pause menu
 				//stateManager->addState(pms);
+				stateManager->changeState(new MainMenuState(stateManager, platform, dtmng));
 				break;
 			}
 			break;
@@ -139,11 +154,16 @@ void ChooseLevelState::render()
 		levelButtons[i]->render(platform->getRenderer());
 	}*/
 
-
-	for (int i = 0; i < levelIcons.size(); i++)
+	/*for (int i = 0; i < levelIcons.size(); i++)
 	{
-		levelIcons[i]->render(platform->getRenderer());
-	}
+	levelIcons[i]->render(platform->getRenderer());
+	}*/
+
+	chooseStateTex->pushSpriteToScreen(platform->getRenderer(), Vec2((platform->getWindowSize().x / 2) - 192.f, 30.f), 0, Vec2(384, 41));
+
+
+
+	levelGrid->render(platform->getRenderer());
 
 }
 
@@ -151,37 +171,24 @@ void ChooseLevelState::load()
 {
 	//generate-map button
 	//white texture
-	white = new Texture(platform->getRenderer(), 255, 255, 255);
+	//white = new Texture(platform->getRenderer(), 255, 255, 255);
 
-	levTex1 = new Texture("res/img/lev1.png", platform->getRenderer());
-	levTex2 = new Texture("res/img/lev2.png", platform->getRenderer());
-	levTex3 = new Texture("res/img/lev3.png", platform->getRenderer());
+	chooseStateTex = new Texture("res/img/chooselevel.png", platform->getRenderer());
 
+	levelGrid = new LevelGrid(Vec2(50, 100), 5, 3, dtmng, platform->getRenderer());
 
-	LevelIcon *li1 = new LevelIcon(Vec2(25, 25), Vec2(114, 95), levTex1, Vec2(104, 65), dtmng->getSaveDataManager()->getLevelFromID("M01"), platform->getRenderer(), dtmng->getTextImageManager());
-	LevelIcon *li2 = new LevelIcon(Vec2(175, 25), Vec2(114, 95), levTex2, Vec2(104, 65), dtmng->getSaveDataManager()->getLevelFromID("M02"), platform->getRenderer(), dtmng->getTextImageManager());
-	LevelIcon *li3 = new LevelIcon(Vec2(325, 25), Vec2(114, 95), levTex3, Vec2(104, 65), dtmng->getSaveDataManager()->getLevelFromID("M03"), platform->getRenderer(), dtmng->getTextImageManager());
+	float lgx = (platform->getWindowSize().x / 2) -(levelGrid->getDimensions().x / 2);
 
-	levelIcons.push_back(li1);
-	levelIcons.push_back(li2);
-	levelIcons.push_back(li3);
+	Vec2 tmp = levelGrid->getPosition();
 
-	//Button *level1 = new Button(levTex1, Vec2(25, 25), Vec2(104, 65), Vec2(0, 0));
-	//Button *level2 = new Button(levTex2, Vec2(175, 25), Vec2(104, 65), Vec2(0, 0));
-
-
-	//levelButtons.push_back(level1);
-	//levelButtons.push_back(level2);
-
-
-
-
+	levelGrid->setNewPosition(Vec2(lgx, tmp.y));
 }
 
 void ChooseLevelState::unload()
 {
 
-
+	delete levelGrid;
+	delete chooseStateTex;
 
 
 

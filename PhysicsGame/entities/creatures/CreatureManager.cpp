@@ -23,6 +23,7 @@ void CreatureManager::loadCreatureData(std::string filePath, SDL_Renderer *rende
 	Utility::log(Utility::I, "Loading all creatures type data : " + filePath);
 
 	std::ifstream creatureList(filePath);
+	std::unordered_map<std::string, Animation*> animations;
 
 	if (creatureList.is_open())
 	{
@@ -65,14 +66,55 @@ void CreatureManager::loadCreatureData(std::string filePath, SDL_Renderer *rende
 				creature >> creatureStrength;
 				creature >> creatureMaxHealth;
 
-				/*
-				WILL NEED TO GET ANIMATION DATA
-				*/
-
 				Texture* creatureSpriteSheet = new Texture(spritesheetPath, renderer);
 
+				int numAnimations;
+				std::string state;
+				int numFrames;
+				Vec2 framePos;
+				Vec2 frameDimens;
+
+
+				creature >> numAnimations;
+
+
+
+
+
+				//animation data
+
+				for (int i = 0; i < numAnimations; i++)
+				{
+					creature >> state;
+					creature >> numFrames;
+					std::vector<Frame*> frames;
+					for (int j = 0; j < numFrames; j++)
+					{
+						creature >> framePos.x;
+						creature >> framePos.y;
+						creature >> frameDimens.x;
+						creature >> frameDimens.y;
+
+						Frame *fr = new Frame(creatureSpriteSheet, framePos, frameDimens);
+						frames.push_back(fr);
+
+					}
+					Animation *a = new Animation(state, numFrames, frames);
+					animations[state] = a;
+				}
+
+
+
+
+
+
+
+
+
+				//Texture* creatureSpriteSheet = new Texture(spritesheetPath, renderer);
+
 				creatureTypes[ID] = new CreatureType(creatureSpriteSheet, ID, creatureName, creatureDimensions, 
-					creatureWeight, creatureSpeed, creatureMaxSpeed, creatureStrength, creatureMaxHealth);
+					creatureWeight, creatureSpeed, creatureMaxSpeed, creatureStrength, creatureMaxHealth, animations);
 
 
 				creature.close();
@@ -107,6 +149,7 @@ void CreatureManager::loadCharacterData(std::string filePath, SDL_Renderer *rend
 	Utility::log(Utility::I, "Loading all creatures type data : " + filePath);
 
 	std::ifstream charList(filePath);
+	std::unordered_map<std::string, Animation*> animations;
 
 	if (charList.is_open())
 	{
@@ -133,7 +176,7 @@ void CreatureManager::loadCharacterData(std::string filePath, SDL_Renderer *rend
 
 				Vec2 characterDimensions;
 
-				float characterWeight;
+				float characterMass;
 				float characterSpeed;
 				float characterMaxSpeed;
 				float characterStrength;
@@ -144,20 +187,57 @@ void CreatureManager::loadCharacterData(std::string filePath, SDL_Renderer *rend
 				character >> characterDimensions.x;
 				character >> characterDimensions.y;
 
-				character >> characterWeight;
+				character >> characterMass;
 				character >> characterSpeed;
 				character >> characterMaxSpeed;
 				character >> characterStrength;
 				character >> characterMaxHealth;
 
-				/*
-				WILL NEED TO GET ANIMATION DATA
-				*/
-
 				Texture* characterSpriteSheet = new Texture(spritesheetPath, renderer);
 
+				int numAnimations;
+				std::string state;
+				int numFrames;
+				Vec2 framePos;
+				Vec2 frameDimens;
+
+				
+				character >> numAnimations;
+
+				
+
+				
+
+				//animation data
+
+				for (int i = 0; i < numAnimations; i++)
+				{
+					character >> state;
+					character >> numFrames;
+					std::vector<Frame*> frames;
+					for (int j = 0; j < numFrames; j++)
+					{
+						character >> framePos.x;
+						character >> framePos.y;
+						character >> frameDimens.x;
+						character >> frameDimens.y;
+
+						Frame *fr = new Frame(characterSpriteSheet, framePos, frameDimens);
+						frames.push_back(fr);
+
+					}
+					Animation *a = new Animation(state, numFrames, frames);
+					animations[state] = a;
+				}
+				
+				
+
+		
+
+				
+
 				characterTypes[ID] = new CharacterType(characterSpriteSheet, ID, characterName, characterDimensions,
-					characterWeight, characterSpeed, characterMaxSpeed, characterStrength, characterMaxHealth);
+					characterMass, characterSpeed, characterMaxSpeed, characterStrength, characterMaxHealth, animations);
 
 
 				character.close();

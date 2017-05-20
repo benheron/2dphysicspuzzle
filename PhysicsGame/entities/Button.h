@@ -12,6 +12,8 @@ public:
 	Button();
 	virtual ~Button();
 
+	Button(Vec2 pos, Vec2 dimensions);
+
 	/**
 	@brief Create the Button using the size of the Texture as the size of the Entity.
 	@param texture A pointer to the Texture.
@@ -91,6 +93,8 @@ public:
 	*/
 	bool getSelected();
 
+	void setIdle();
+
 protected:
 	/**
 	@brief Builds the button in this function
@@ -100,14 +104,16 @@ protected:
 	///The button background
 	Texture *buttonBgr;
 
-	///The text used on the button
-	TTF_Font *font = NULL;
 
-	///If displaying the hover image
-	bool hover = false;
 
-	///if displaying the selected image
-	bool selected = false;
+	enum ButtonState {
+		buttonHover,
+		buttonSelected,
+		buttonIdle
+	};
+
+	ButtonState bState;
+
 
 
 

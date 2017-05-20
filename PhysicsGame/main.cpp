@@ -12,7 +12,7 @@ int main(int argc, char *argv[]);
 
 int main(int argc, char *argv[])
 {
-	Platform* platform = new Platform("AINT354");
+	Platform* platform = new Platform("2D Physics Puzzler");
 
 	int imageFormats = IMG_INIT_JPG | IMG_INIT_PNG;
 	int mixerFormats = MIX_INIT_MP3 | MIX_INIT_OGG;
@@ -61,7 +61,10 @@ int main(int argc, char *argv[])
 		int frameRate = dt * 1000;
 		//Utility::log(Utility::I, Utility::floatToString(frameRate));
 
-
+		if (dt > 0.050)
+		{
+			dt = 0.050;
+		}
 		//display fps
 
 		/*float a = 1 / dt;
@@ -77,10 +80,10 @@ int main(int argc, char *argv[])
 		SDL_RenderPresent(renderer);
 
 
-		if (dt < (1.0f / 50.0f))
+		/*if (dt < (1.0f / 50.0f))
 		{
 			SDL_Delay((unsigned int)(((1.0f / 50.0f) - dt)*1000.0f));
-		}
+		}*/
 	}
 
 	delete manager;

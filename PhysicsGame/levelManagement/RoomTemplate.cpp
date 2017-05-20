@@ -1,16 +1,19 @@
 #include "RoomTemplate.h"
 
+/*
 RoomTemplate::RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<Tile*>>> roomTiles, std::vector<Creature*> roomCreatures, std::vector<std::string> layerIDs, Vec2 spawnPoint) : roomTiles(roomTiles), roomCreatures(roomCreatures), layerIDs(layerIDs), spawnPoint(spawnPoint)
 {
-}
+}*/
 
-RoomTemplate::RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<std::string>>> roomTilesData, std::vector<std::string> roomCreaturesData, std::vector<std::string> layerIDs, std::vector<ItemData> itemDataSeries) : roomTilesData(roomTilesData), roomCreaturesData(roomCreaturesData), layerIDs(layerIDs), spawnPoint(spawnPoint), itemDataSeries(itemDataSeries)
+RoomTemplate::RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<std::string>>> roomTilesData, std::vector<std::string> roomCreaturesData, std::vector<std::string> layerIDs, std::vector<ItemData> itemDataSeries, std::vector<MovPlatData> movPlatDataSeries, std::vector<PadSwitchdata> padSwitchDataSeries, std::vector<DoorData> doorDataSeries, std::vector<ObjectsData> physicsObjectDataSeries, std::vector<ObjectsData> creatureObjectDataSeries, Vec2 playerPos)
+	: roomTilesData(roomTilesData), roomCreaturesData(roomCreaturesData), layerIDs(layerIDs), spawnPoint(spawnPoint), itemDataSeries(itemDataSeries), movPlatDataSeries(movPlatDataSeries), padSwitchDataSeries(padSwitchDataSeries), physicsObjectDataSeries(physicsObjectDataSeries), doorDataSeries(doorDataSeries), creatureObjectDataSeries(creatureObjectDataSeries), playerPos(playerPos)
 {
 }
 
+/*
 RoomTemplate::RoomTemplate(std::unordered_map<std::string, std::vector<std::vector<Tile*>>> roomTiles, std::vector<Creature*> roomCreatures, std::vector<std::string> layerIDs, Vec2 spawnPoint, Vec2 mapPos) : roomTiles(roomTiles), roomCreatures(roomCreatures), layerIDs(layerIDs), spawnPoint(spawnPoint), mapPos(mapPos)
 {
-}
+}*/
 
 
 RoomTemplate::~RoomTemplate()
@@ -113,4 +116,36 @@ std::vector<std::string> RoomTemplate::getCreatureData()
 std::vector<ItemData> RoomTemplate::getItemData()
 {
 	return itemDataSeries;
+}
+
+
+
+std::vector<MovPlatData> RoomTemplate::getMovPlatData()
+{
+	return movPlatDataSeries;
+}
+
+std::vector<PadSwitchdata> RoomTemplate::getPadSwitchdata()
+{
+	return padSwitchDataSeries;
+}
+
+std::vector<ObjectsData> RoomTemplate::getPhysicsObjectData()
+{
+	return physicsObjectDataSeries;
+}
+
+std::vector<DoorData> RoomTemplate::getDoorData()
+{
+	return doorDataSeries;
+}
+
+Vec2 RoomTemplate::getPlayerSpawn()
+{
+	return playerPos;
+}
+
+std::vector<ObjectsData> RoomTemplate::getCreaturesObjectData()
+{
+	return creatureObjectDataSeries;
 }

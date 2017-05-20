@@ -13,7 +13,7 @@ TextCharacterType::~TextCharacterType()
 
 void TextCharacterType::render(SDL_Renderer* renderer, Vec2 pos, Vec2 dimensions)
 {
-	spritesheet->pushSpriteToScreen(renderer, pos, spriteDimensions, spritePosition, spriteDimensions);
+	spritesheet->pushSpriteToScreen(renderer, pos, dimensions, spritePosition, spriteDimensions);
 }
 
 Vec2 TextCharacterType::getTextCharacterDimensions()

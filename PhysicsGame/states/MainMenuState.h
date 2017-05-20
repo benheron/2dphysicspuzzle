@@ -9,11 +9,14 @@
 
 #include "PauseMenuState.h"
 #include "ChooseLevelState.h"
+#include "ShowControlsState.h"
 #include "../audio/SFXR.h"
 #include "../audio/MusicR.h"
 #include "../audio/audio.h"
 
 #include "../Text.h"
+
+
 
 /**
 @class MainMenuState
@@ -77,5 +80,10 @@ protected:
 
 	DataManager *dtmng;
 
-	
+
+	Vec2 mousePos;
+
+	Texture* controls;
+	Button * controlsBtn;
+
 };

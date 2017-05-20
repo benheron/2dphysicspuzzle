@@ -12,6 +12,8 @@ public:
 	Body();
 	virtual ~Body();
 
+	Body(Vec2 pos, Vec2 dimensions);
+
 	/**
 	@brief Create the Body using the size of the Texture as the size of the Entity.
 	@param texture A pointer to the Texture.

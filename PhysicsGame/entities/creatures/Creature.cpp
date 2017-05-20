@@ -32,7 +32,7 @@ void Creature::update(float dt)
 	if (gravityOn)
 	{
 		float accY = 0;
-		accY += 200;
+		accY += 400;
 
 
 		velocity.y += accY * dt;
@@ -77,7 +77,7 @@ void Creature::render(SDL_Renderer* renderer)
 	//If the Tile does not have a blank ID then render to the Tile
 	if (creatureType->getID() != "XX")
 	{
-		creatureType->render(renderer, pos, dimensions, state, frame);
+//		creatureType->render(renderer, pos, dimensions);
 	}
 }
 

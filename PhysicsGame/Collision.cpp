@@ -61,10 +61,24 @@ bool Collision::boxTileEdgeCollision(ManifoldTile *m)
 			{
 				if (n.x < 0)
 				{
-					m->normal = Vec2(-1, 0);
+					if (m->B->getSideR())
+					{
+						m->normal = Vec2(-1, 0);
+					}
+					else {
+						return false;
+					}
+					
 				}
 				else {
-					m->normal = Vec2(1, 0);
+					if (m->B->getSideL())
+					{
+						m->normal = Vec2(1, 0);
+					}
+					else {
+						return false;
+					}
+					
 				}
 				m->penetration = xOverlap;
 				return true;
@@ -73,10 +87,23 @@ bool Collision::boxTileEdgeCollision(ManifoldTile *m)
 			{
 				if (n.y < 0)
 				{
-					m->normal = Vec2(0, -1);
+					if (m->B->getSideD())
+					{
+						m->normal = Vec2(0, -1);
+					}
+					else {
+						return false;
+					}
+					
 				}
 				else {
-					m->normal = Vec2(0, 1);
+					if (m->B->getSideU())
+					{
+						m->normal = Vec2(0, 1);
+					}
+					else {
+						return false;
+					}
 				}
 				m->penetration = yOverlap;
 				return true;
@@ -225,49 +252,58 @@ void Collision::resolve(Manifold *m)
 	m->B->velocity += impulse * m->B->invMass;
 	
 
-
-	//friction response
-	//get new velocity
-	rv = m->B->velocity - m->A->velocity;
-	Vec2 dotv = rv*m->normal;
-	float dot = dotv.x + dotv.y;
-
-	Vec2 tangent = rv - m->normal*dot;
-	Vec2 tnorm = tangent.normalize();
-
-	//Utility::log(Utility::I, "Collision normal: X: " + Utility::floatToString(m->normal.x) + " Y: " + Utility::floatToString(m->normal.y));
-	
-	Vec2 fictionv = tnorm * rv;
-	float pushbackfriction = -(fictionv.x + fictionv.y);
-
-	pushbackfriction /= (m->A->invMass + m->B->invMass);
-
-
-	float average = (m->A->staticFriction + m->B->staticFriction)/2;
-
-	Vec2 impulse3;
-
-	if (abs(pushbackfriction) < (pushback * average))
+	if (m->A->getApplyFriction() && m->B->getApplyFriction())
 	{
-		impulse3 = tnorm *pushbackfriction;
-	} else{
-		float dynFriction = pythagorus(m->A->dynamicFriction, m->B->dynamicFriction);
-		impulse3 = tnorm * dynFriction * -pushback;
+		//friction response
+		//get new velocity
+		rv = m->B->velocity - m->A->velocity;
+		Vec2 dotv = rv*m->normal;
+		float dot = dotv.x + dotv.y;
+
+		Vec2 tangent = rv - m->normal*dot;
+		Vec2 tnorm = tangent.normalize();
+
+		/*if (tnorm == Vec2(0, 1)
+		|| tnorm == Vec2(0, -1))
+		{
+		return;
+		}*/
+		//Utility::log(Utility::I, "Collision normal: X: " + Utility::floatToString(m->normal.x) + " Y: " + Utility::floatToString(m->normal.y));
+
+		Vec2 fictionv = tnorm * rv;
+		float pushbackfriction = -(fictionv.x + fictionv.y);
+
+		pushbackfriction /= (m->A->invMass + m->B->invMass);
+
+
+		float average = pythagorus(m->A->staticFriction, m->B->staticFriction);
+
+		Vec2 impulse3;
+
+		if (abs(pushbackfriction) < (pushback * average))
+		{
+			impulse3 = tnorm *pushbackfriction;
+		}
+		else {
+			float dynFriction = pythagorus(m->A->dynamicFriction, m->B->dynamicFriction);
+			impulse3 = tnorm * dynFriction *-pushback;
+		}
+
+		/*Vec2 impulse2 = tnorm * pushbackfriction;
+		m->A->velocity -= impulse2 * m->A->invMass;
+		m->B->velocity += impulse2 * m->B->invMass;*/
+
+		m->A->velocity -= impulse3 * m->A->invMass;
+		m->B->velocity += impulse3 * m->B->invMass;
 	}
-
-	/*Vec2 impulse2 = tnorm * pushbackfriction;
-	m->A->velocity -= impulse2 * m->A->invMass;
-	m->B->velocity += impulse2 * m->B->invMass;*/
-
-	m->A->velocity -= impulse3 * m->A->invMass;
-	m->B->velocity += impulse3 * m->B->invMass;
+	
 
 }
 
 void Collision::correctPositions(Manifold *m)
 {
 	float percent = 0.4;
-	float slop = 0.001;
+	float slop = 0.05;
 	//Vec2 correction = m->normal* (m->penetration / (m->A->invMass + m->B->invMass)) * percent;
 
 	Vec2 correction = m->normal* (std::max(m->penetration - slop, 0.0f) / (m->A->invMass + m->B->invMass)) * percent;
@@ -294,4 +330,14 @@ float Collision::pythagorus(float a, float b)
 	float c = sqrt(c2);
 
 	return c;
+}
+
+float Collision::findAngleRad(Vec2 v)
+{
+	return atan2(v.y, v.x);
+}
+
+float Collision::findAngleDeg(Vec2 v)
+{
+	return atan2(v.y, v.x)*180/PI;
 }

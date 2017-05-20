@@ -81,6 +81,7 @@ public:
 	void setSideD(bool s);
 	bool getSideD();
 
+
 private:
 	///Reference to tile type.
 	TileType* tileType;

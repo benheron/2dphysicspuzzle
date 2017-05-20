@@ -38,10 +38,7 @@ void MapExit::update(float dt)
 
 void MapExit::render(SDL_Renderer *renderer)
 {
-	if (opened)
-	{
-		texture->pushToScreen(renderer, pos, dimensions);
-	}
+	texture->pushToScreen(renderer, pos, dimensions);
 }
 
 

@@ -7,8 +7,10 @@
 #include "entities/items/ItemManager.h"
 #include "audio/AudioManager.h"
 #include "TextImageManager.h"
+#include "AssetManager.h"
 
 #include "states/PauseMenuState.h"
+#include "Keyboard.h"
 
 class DataManager {
 public:
@@ -23,7 +25,9 @@ public:
 	ItemManager* getItemManager();
 	AudioManager* getAudioManager();
 	TextImageManager* getTextImageManager();
-
+	KeyboardManager* getKeyboardManager();
+	AssetManager* getAssetManager();
+	PauseMenuState* getPauseMenuState();
 	
 
 protected:
@@ -38,4 +42,8 @@ protected:
 	TextImageManager* timng;
 
 	PauseMenuState *pms;
+
+	KeyboardManager *kmng;
+
+	AssetManager *asmng;
 };

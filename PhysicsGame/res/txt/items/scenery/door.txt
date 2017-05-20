@@ -1,0 +1,13 @@
+res/img/door.png
+door
+16
+32
+0
+
+//Comments:
+//filepath
+//Name
+//width per frame
+//height per frame
+//Attributes:
+//mass

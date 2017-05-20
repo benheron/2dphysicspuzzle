@@ -1,0 +1,15 @@
+Examples:
+
+MovingPlatform
+
+MP
+F3
+150 385 //start
+300 385 // end
+40 //speed
+0 //pre-activated
+0 // reversing
+
+PP
+120 286
+F3

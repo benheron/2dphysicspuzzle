@@ -116,12 +116,24 @@ Vec2 Entity::getCentre() {
 
 
 
+/*
 std::string Entity::getID()
 {
 	return itemID;
-}
+}*/
 
 float Entity::getBounciness()
 {
 	return bounciness;
 }
+
+void Entity::setApplyFriction(bool af)
+{
+	applyFriction = af;
+}
+
+bool Entity::getApplyFriction()
+{
+	return applyFriction;
+}
+

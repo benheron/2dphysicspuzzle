@@ -1,6 +1,6 @@
 #include "LevelIcon.h"
 
-LevelIcon::LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Level *levelData, SDL_Renderer *renderer, TextImageManager *timng) : Entity(pos, dimensions)
+LevelIcon::LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Level *levelData, SDL_Renderer *renderer, TextImageManager *timng, Texture*bg) : Button(pos, dimensions), background(bg)
 {
 	levelImage = li;
 	imgSize = textSize;
@@ -38,12 +38,12 @@ LevelIcon::LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Leve
 
 	complete = levelData->hasComplete();
 
-	int imgX = pos.x + dimensions.x / 2 - imgSize.x/2;
-	int imgY = pos.y + dimensions.y / 5 - imgSize.y/2;
+	int imgX = pos.x + (dimensions.x / 2) - imgSize.x/2;
+	int imgY = pos.y + 5;// (dimensions.y / 2) - imgSize.y / 2;
 
 	imgPos = Vec2(imgX, imgY);
 
-	int timeX = pos.x + dimensions.x / 2 - timeScale.x/2;
+	int timeX = pos.x + dimensions.x / 2;// -timeScale.x / 2;
 	int timeY = imgPos.y + imgSize.y + 5;
 	timePos = Vec2(timeX, timeY);
 
@@ -53,7 +53,12 @@ LevelIcon::LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Leve
 
 	//timeText = new Texture(renderer, levelTime, font, { 255,255,255 });
 
-	timeText = new Text(timePos, 2, "Arial", 32, levelTime, timng);
+	timeText = new Text(timePos, 2, "Arial", 20, levelTime, timng);
+
+	timeText->setAlign(centreAlign);
+
+
+
 
 		
 }
@@ -70,12 +75,40 @@ void LevelIcon::update(float dt)
 
 void LevelIcon::render(SDL_Renderer* renderer)
 {
+	switch (bState)
+	{
+	case Button::buttonHover:
+		background->pushSpriteToScreen(renderer, pos, dimensions, Vec2(0, 200), Vec2(200, 200));
+		break;
+	case Button::buttonSelected:
+		background->pushSpriteToScreen(renderer, pos, dimensions, 0, Vec2(200, 200));
+		//texture->pushSpriteToScreen(renderer, pos, Vec2(spritePos.x, spriteDimensions.y * 2), spriteDimensions);
+		break;
+	case Button::buttonIdle:
+		background->pushSpriteToScreen(renderer, pos, dimensions, 0, Vec2(200, 200));
+		break;
+	default:
+		background->pushSpriteToScreen(renderer, pos, dimensions, 0, Vec2(200, 200));
+		break;
+	}
+
+
 	levelImage->pushSpriteToScreen(renderer, imgPos, Vec2(0, 0), imgSize);
 	//timeText->renderText(renderer, timePos, timeScale);
 	timeText->render(renderer);
+
+	
+
 }
 
 std::string LevelIcon::getLevelID()
 {
 	return levelID;
+}
+
+void LevelIcon::changeIconPosition(Vec2 cip)
+{
+	imgPos += cip;
+	pos += cip;
+	timeText->changeTextPosition(cip);
 }

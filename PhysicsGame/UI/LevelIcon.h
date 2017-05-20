@@ -5,15 +5,16 @@
 #include "../levelManagement/Level.h"
 #include "../Utility.h" 
 #include "../Text.h"
+#include "../entities/Button.h"
 
 /**
 @brief A slider that holds values between a min and max. Uses SliderSquare
 */
-class LevelIcon : public Entity {
+class LevelIcon : public Button {
 public:
 
 
-	LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Level *levelData, SDL_Renderer *renderer, TextImageManager *timng);
+	LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Level *levelData, SDL_Renderer *renderer, TextImageManager *timng, Texture *bg);
 
 	~LevelIcon();
 
@@ -22,6 +23,8 @@ public:
 	void update(float dt);
 	
 	std::string getLevelID();
+
+	void changeIconPosition(Vec2 cip);
 
 private:
 
@@ -42,5 +45,6 @@ private:
 
 	Text *timeText;
 
+	Texture* background;
 
 };

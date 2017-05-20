@@ -23,8 +23,21 @@ bool PauseMenuState::eventHandler()
 	int mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
-	Vec2 mousePos = Vec2(mouseX, mouseY);
+	mousePos = Vec2(mouseX, mouseY);
 	SDL_Event events;
+	/*for (int i = 0; i < pauseMenuButtons.size(); i++)
+	{
+		pauseMenuButtons[i]->setIdle();
+	}
+
+	for (int i = 0; i < pauseMenuButtons.size(); i++)
+	{
+		if (Collision::pointBoxCollision(mousePos, pauseMenuButtons[i]->getPosition(), pauseMenuButtons[i]->getDimensions()))
+		{
+			pauseMenuButtons[i]->setHover(true);
+		}
+	}*/
+
 	while (SDL_PollEvent(&events))
 	{
 		switch (events.type)
@@ -35,15 +48,21 @@ bool PauseMenuState::eventHandler()
 			{
 				if (Collision::pointBoxCollision(mousePos, pauseMenuButtons[i]->getPosition(), pauseMenuButtons[i]->getDimensions()))
 				{
-					if (!leftDown)
+					if (!pauseMenuButtons[i]->getHover())
+					{
+						dtmng->getAudioManager()->getSFXByName("OptionSelect")->playAudio(0);
+					}
+					pauseMenuButtons[i]->setHover(true);
+					/*if (!leftDown)
 					{
 						pauseMenuButtons[i]->setHover(true);
-					}
+					}*/
 					
 				}
 				else {
-					pauseMenuButtons[i]->setHover(false);
-					pauseMenuButtons[i]->setSelected(false);
+					pauseMenuButtons[i]->setIdle();
+				//	pauseMenuButtons[i]->setHover(false);
+					//pauseMenuButtons[i]->setSelected(false);
 				}
 			}
 
@@ -65,28 +84,20 @@ bool PauseMenuState::eventHandler()
 				{
 					if (Collision::pointBoxCollision(mousePos, pauseMenuButtons[i]->getPosition(), pauseMenuButtons[i]->getDimensions()))
 					{
-						pauseMenuButtons[i]->setHover(false);
+						//pauseMenuButtons[i]->setHover(false);
 						pauseMenuButtons[i]->setSelected(true);
 					}
 					else {
-						pauseMenuButtons[i]->setSelected(false);
+					//	pauseMenuButtons[i]->setSelected(false);
 					}
 				}
 				
-				if (Collision::pointBoxCollision(mousePos, resumeBtn->getPosition(), resumeBtn->getDimensions()))
+				/*if (Collision::pointBoxCollision(mousePos, resumeBtn->getPosition(), resumeBtn->getDimensions()))
 				{
 					stateManager->popLastStateWithoutDelete();
-					return false;
-				}
-/*
-
-				if (Collision::pointBoxCollision(mousePos, quitMenuBtn->getPosition(), quitMenuBtn->getDimensions()))
-				{
-					leftDown = false;
-					stateManager->popLastStateWithoutDelete();
-					stateManager->changeState(new MainMenuState(stateManager, platform, ttmng, cmng, mmng, this));
 					return false;
 				}*/
+
 
 				if (Collision::pointBoxCollision(mousePos, quitDesktopBtn->getPosition(), quitDesktopBtn->getDimensions()))
 				{
@@ -102,7 +113,7 @@ bool PauseMenuState::eventHandler()
 			switch (events.button.button)
 			{
 			case SDL_BUTTON_LEFT:
-				leftDown = false;
+				/*leftDown = false;
 				for (int i = 0; i < pauseMenuButtons.size(); i++)
 				{
 					if (Collision::pointBoxCollision(mousePos, pauseMenuButtons[i]->getPosition(), pauseMenuButtons[i]->getDimensions()))
@@ -110,7 +121,7 @@ bool PauseMenuState::eventHandler()
 						pauseMenuButtons[i]->setSelected(false);
 						pauseMenuButtons[i]->setHover(true);
 					}
-				}
+				}*/
 				break;
 			}
 			break;
@@ -141,7 +152,18 @@ bool PauseMenuState::eventHandler()
 
 void PauseMenuState::update(float dt)
 {
-	
+	if (resumeBtn->getSelected())
+	{
+		resumeBtn->setIdle();
+		stateManager->popLastStateWithoutDelete();
+	}
+
+	if (quitMenuBtn->getSelected())
+	{
+		quitMenuBtn->setIdle();
+		stateManager->popLastStateWithoutDelete();
+		stateManager->changeState(new ChooseLevelState(stateManager, platform, dtmng));
+	}
 }
 
 void PauseMenuState::render()
@@ -158,7 +180,7 @@ void PauseMenuState::load()
 {
 	resumeTexture = new Texture("res/img/buttons/resumeBtn.png", platform->getRenderer());
 	quitToMenuTexture = new Texture("res/img/buttons/quitmenuBtn.png", platform->getRenderer());
-	quitToDesktopTexture = new Texture("res/img/buttons/quitdesktopBtn.png", platform->getRenderer());
+	//quitToDesktopTexture = new Texture("res/img/buttons/quitdesktopBtn.png", platform->getRenderer());
 	mnubg = new Texture("res/img/menubg.png", platform->getRenderer());
 
 	Utility::log(Utility::I, Utility::intToString(platform->getWindowSize().x));
@@ -171,13 +193,13 @@ void PauseMenuState::load()
 	
 
 	resumeBtn = new Button(resumeTexture, Vec2(xPos, 30), btnSize, Vec2(0,0));
-	//quitMenuBtn = new Button(quitToMenuTexture, Vec2(xPos, 210), btnSize, Vec2(0, 0));
-	quitDesktopBtn = new Button(quitToDesktopTexture, Vec2(xPos, 120), btnSize, Vec2(0, 0));
+	quitMenuBtn = new Button(quitToMenuTexture, Vec2(xPos, 120), btnSize, Vec2(0, 0));
+	quitDesktopBtn = new Button(dtmng->getAssetManager()->getTexture("quittodesktop"), Vec2(xPos, 210), btnSize, Vec2(0, 0));
 	
 
 
 	pauseMenuButtons.push_back(resumeBtn);
-	//pauseMenuButtons.push_back(quitMenuBtn);
+	pauseMenuButtons.push_back(quitMenuBtn);
 	pauseMenuButtons.push_back(quitDesktopBtn);
 }
 

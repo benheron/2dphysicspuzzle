@@ -1,0 +1,13 @@
+res/img/movplat.png
+MovingPlatform
+64
+20
+0
+
+//Comments:
+//filepath
+//Name
+//width per frame
+//height per frame
+//Attributes:
+//mass

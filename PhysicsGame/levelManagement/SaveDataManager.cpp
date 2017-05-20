@@ -1,8 +1,8 @@
 #include "SaveDataManager.h"
 
-SaveDataManager::SaveDataManager(std::string filePath, MapManager *mmng)
+SaveDataManager::SaveDataManager(std::string filePath, MapManager *mmng, SDL_Renderer* renderer)
 {
-
+	defaultImage = new Texture("res/img/icondefault.png", renderer);
 	loadSaveData(filePath, mmng);
 }
 
@@ -34,6 +34,11 @@ bool SaveDataManager::loadSaveData(std::string filePath, MapManager *mmng)
 
 			levelsID[levelID] = newLevel;
 			levelsString.push_back(newLevel);
+
+			theLevelIDs.push_back(levelID);
+
+			//temp textures for level icons
+			iconTexturesID[levelID] = mmng->getLevelIcon(levelID);
 		}
 
 		return true;
@@ -51,4 +56,19 @@ Level* SaveDataManager::getLevelFromIndex(int i)
 Level* SaveDataManager::getLevelFromID(std::string ID)
 {
 	return levelsID[ID];
+}
+
+int SaveDataManager::getNumLevels()
+{
+	return levelsString.size();
+}
+
+std::vector<std::string> SaveDataManager::getTheLevelIDs()
+{
+	return theLevelIDs;
+}
+
+Texture* SaveDataManager::getLevelIconFromID(std::string ID)
+{
+	return iconTexturesID[ID];
 }

@@ -5,6 +5,7 @@ fontName(fontName), fontSize(fontSize), theText(theText), timng(timng)
 {
 	spacing = 0;
 	writeText();
+	origPos = pos;
 }
 
 Text::~Text()
@@ -33,8 +34,10 @@ void Text::writeText()
 		else {
 			newPosVec = pos;
 		}
-		tc = new TextCharacter(newPosVec, tct->getTextCharacterDimensions(), tct);
+		tc = new TextCharacter(newPosVec, tct->getTextCharacterDimensions()/32 * fontSize, tct);
 		textString.push_back(tc);
+
+		dimensions += tct->getTextCharacterDimensions() / 32 * fontSize;
 	}
 }
 
@@ -60,4 +63,45 @@ void Text::changeCharacter(int index, std::string textChar)
 std::string Text::getText()
 {
 	return theText;
+}
+
+void Text::setAlign(Align a)
+{
+	if (alignment != a)
+	{
+		alignment = a;
+
+		if (alignment == leftAlign)
+		{
+			pos = origPos;
+			for (int i = 0; i < textString.size(); i++)
+			{
+				Vec2 ts = textString[i]->getPosition();
+				ts.x += dimensions.x / 2;
+
+				textString[i]->setPosition(ts);
+			}
+
+		}
+		else if (alignment == centreAlign) {
+			pos.x = origPos.x - dimensions.x / 2;
+			for (int i = 0; i < textString.size(); i++)
+			{
+				Vec2 ts = textString[i]->getPosition();
+				ts.x -= dimensions.x / 2;
+
+				textString[i]->setPosition(ts);
+			}
+		}
+	}
+}
+
+void Text::changeTextPosition(Vec2 changeVec)
+{
+	for (int i = 0; i < textString.size(); i++)
+	{
+		Vec2 tPos = textString[i]->getPosition();
+		tPos += changeVec;
+		textString[i]->setPosition(tPos);
+	}
 }

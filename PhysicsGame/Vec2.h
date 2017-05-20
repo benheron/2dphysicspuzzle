@@ -104,6 +104,7 @@ public:
 	}
 
 
+
 	//Operator Overloading
 	
 	Vec2* operator += (Vec2 b)

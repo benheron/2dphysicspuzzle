@@ -9,13 +9,17 @@ Tile::Tile(Vec2 pos, Vec2 dimensions, TileType *tileType) : Entity(pos, dimensio
 	collidable = tileType->getCollidable();
 	destructible = tileType->getDamageValue();
 	bounciness = tileType->getBounciness();
-	sideL = true;
-	sideR = true;
-	sideU = true;
-	sideD = true;
+	climbable = tileType->getClimbable();
+	damageValue = tileType->getDamageValue();
 
-	staticFriction = 0.4;
-	dynamicFriction = 0.2;
+
+	sideL = false;
+	sideR = false;
+	sideU = false;
+	sideD = false;
+
+	staticFriction = 0.7;
+	dynamicFriction = 0.6;
 }
 
 Tile::Tile(Texture* texture, Vec2 pos, Vec2 dimensions, TileType *tileType) : Entity(texture, pos, dimensions), tileType(tileType)

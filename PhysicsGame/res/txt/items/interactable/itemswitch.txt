@@ -1,0 +1,13 @@
+res/img/itemswitch.png
+itemswitch
+22
+28
+0
+
+//Comments:
+//filepath
+//Name
+//width per frame
+//height per frame
+//Attributes:
+//mass
