@@ -1,6 +1,6 @@
 2
-O res/img/objects.png 32 32
-B res/img/backgroundTiles.png 32 32
+O res/img/objecttiles.png 32 32
+B res/img/bgtiles.png 32 32
 82
 O XX 0 0 0 0 0 0 0 0
 O W0 0 0 1 0 1 1 0 0

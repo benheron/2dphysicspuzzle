@@ -95,7 +95,11 @@ public:
 	/*void setRadius(float r);
 
 	float getRadius();*/
+	
 
+	void setCanCarry(bool c);
+
+	bool getCanCarry();
 
 protected:
 	/**
@@ -112,5 +116,5 @@ protected:
 
 	float radius;
 
-
+	bool canCarry = true;
 };

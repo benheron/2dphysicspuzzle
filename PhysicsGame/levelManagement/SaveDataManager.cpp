@@ -6,6 +6,14 @@ SaveDataManager::SaveDataManager(std::string filePath, MapManager *mmng, SDL_Ren
 	loadSaveData(filePath, mmng);
 }
 
+SaveDataManager::~SaveDataManager()
+{
+	for (int i = 0; i < levelsString.size(); i++)
+	{
+		delete levelsString[i];
+	}
+}
+
 bool SaveDataManager::loadSaveData(std::string filePath, MapManager *mmng)
 {
 	
@@ -31,6 +39,7 @@ bool SaveDataManager::loadSaveData(std::string filePath, MapManager *mmng)
 			dataFile >> complete;
 
 			Level* newLevel = new Level(mmng->getMap(levelID), levelID, fastestTime, numSecrets, complete);
+			newLevel->setLevelIndex(i);
 
 			levelsID[levelID] = newLevel;
 			levelsString.push_back(newLevel);

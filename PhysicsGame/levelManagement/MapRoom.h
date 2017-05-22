@@ -159,6 +159,8 @@ public:
 
 	void renderDebug(SDL_Renderer *renderer, Texture *red);
 
+	bool checkNonBoxMouseCollide(Vec2 mousePos);
+
 	Character* getPlayer();
 	std::vector<Square*> getSquares();
 	std::vector<Circle*> getCircles();

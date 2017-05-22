@@ -31,6 +31,10 @@ Character::Character(Vec2 pos, CharacterType *characterType) :Entity(pos), chara
 	velocity = 0;
 
 	pState = idleState;
+
+	onBody = false;
+
+	entName = "Player";
 }
 
 Character::Character(Texture* texture, Vec2 pos, CharacterType *characterType) :Entity(texture, pos), characterType(characterType)
@@ -349,14 +353,16 @@ Vec2 Character::getLocalVelocity()
 	return localVelocity;
 }
  
-void Character::jump()
+void Character::jump(Audio *jp)
 {
 	if (canJump && onFloor)
 	{
 		if (pState == idleState || pState == movingState)
 		{
+			jp->playAudio(0);
 			jumpTimer = 0.2;
 			canJump = false;
+			onBody = false;
 			Utility::log(Utility::I, "JUMP");
 			velocity.y = -205;
 			if (onMovPlatform)
@@ -493,4 +499,47 @@ void Character::setAlive(bool a)
 bool Character::getAlive()
 {
 	return alive;
+}
+
+
+void Character::setCarryingBody(bool cb, Body* b)
+{
+	carryingBody = cb;
+	bodyCarrying = b;
+}
+
+void Character::setCarryingBody(bool cb)
+{
+	carryingBody = cb;
+}
+
+bool Character::getCarryingBody()
+{
+	return carryingBody;
+}
+
+void Character::setOnBody(bool ob)
+{
+	onBody = ob;
+}
+
+void Character::setOnBody(bool ob, Body *b)
+{
+	onBody = ob;
+	bodyOnTopOf = b;
+}
+
+bool Character::isOnBody()
+{
+	return onBody;
+}
+
+Body* Character::getBodyOnTopOf()
+{
+	return bodyOnTopOf;
+}
+
+Body* Character::getBodyCarrying()
+{
+	return bodyCarrying;
 }

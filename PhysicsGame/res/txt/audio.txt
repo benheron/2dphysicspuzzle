@@ -1,6 +1,10 @@
 2
 ts TitleScreen res/audio/music/Funkorama.wav
 ps Ingame res/audio/music/ShavingMirror.wav
-1
+6
 1 OptionSelect res/audio/sfx/optionselect2.wav
-
+2 Death res/audio/sfx/death2.wav
+3 Jump res/audio/sfx/jump.wav
+4 BodyPick res/audio/sfx/pickup.wav
+5 DoorOpen res/audio/sfx/dooropen.wav
+6 EndLevel res/audio/sfx/endlevel.wav

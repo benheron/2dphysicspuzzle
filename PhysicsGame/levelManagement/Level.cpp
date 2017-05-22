@@ -55,3 +55,13 @@ bool Level::hasComplete()
 {
 	return complete;
 }
+
+void Level::setLevelIndex(int i)
+{
+	levelIndex = i;
+}
+
+int Level::getLevelIndex()
+{
+	return levelIndex;
+}

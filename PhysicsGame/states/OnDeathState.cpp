@@ -110,8 +110,7 @@ bool OnDeathState::eventHandler()
 				//pressing a key
 			case SDLK_ESCAPE:
 
-				stateManager->popLastStateWithoutDelete();
-				return false;
+			
 				break;
 			}
 			break;
@@ -148,6 +147,11 @@ void OnDeathState::update(float dt)
 
 void OnDeathState::render()
 {
+	dtmng->getAssetManager()->getTexture("menubg")->pushSpriteToScreen(platform->getRenderer(), bgPos);
+	haveDied->render(platform->getRenderer());
+
+	dtmng->getAssetManager()->getTexture("deathface")->pushSpriteToScreen(platform->getRenderer(), deathFacePos);
+
 	for (int i = 0; i < deathStateButtons.size(); i++)
 	{
 		deathStateButtons[i]->render(platform->getRenderer());
@@ -161,19 +165,32 @@ void OnDeathState::load()
 	int xPos = (platform->getWindowSize().x / 2) - (btnSize.x / 2);
 
 
-	retryButton = new Button(dtmng->getAssetManager()->getTexture("retry"), Vec2(xPos, 30), btnSize, 0);
+	retryButton = new Button(dtmng->getAssetManager()->getTexture("retry"), Vec2(xPos, 169), btnSize, 0);
 
-	quitMenuBtn = new Button(dtmng->getAssetManager()->getTexture("levelselect"), Vec2(xPos, 120), btnSize, 0);
+	quitMenuBtn = new Button(dtmng->getAssetManager()->getTexture("levelselect"), Vec2(xPos, 251), btnSize, 0);
 
-	quitDesktopBtn = new Button(dtmng->getAssetManager()->getTexture("quittodesktop"), Vec2(xPos, 210), btnSize, 0);
+	quitDesktopBtn = new Button(dtmng->getAssetManager()->getTexture("quittodesktop"), Vec2(xPos, 333), btnSize, 0);
 
 	deathStateButtons.push_back(retryButton);
 	deathStateButtons.push_back(quitMenuBtn);
 	deathStateButtons.push_back(quitDesktopBtn);
 
+	bgPos = platform->getWindowSize()/2 - Vec2(365, 250);
+
+	haveDied = new Text(Vec2(platform->getWindowSize().x/2, 35.f), 0, "arial", 34, "You Have Died!", dtmng->getTextImageManager());
+	haveDied->setAlign(centreAlign);
+
+	int deathFaceX = platform->getWindowSize().x / 2 - 10;
+	int deathFaceY = 120;
+
+	deathFacePos = Vec2(deathFaceX, deathFaceY);
+
 }
 
 void OnDeathState::unload()
 {
-
+	for (int i = 0; i < deathStateButtons.size(); i++)
+	{
+		delete deathStateButtons[i];
+	}
 }

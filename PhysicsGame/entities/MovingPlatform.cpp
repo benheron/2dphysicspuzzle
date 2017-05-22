@@ -28,7 +28,7 @@ void MovingPlatform::update(float dt)
 	{
 		//if (pos != end)
 		{
-			if (Collision::distanceBetween(start, pos) > dist)
+			if (Collision::distanceBetween(start, pos) >= dist)
 			{
 				if (reversing)
 				{
@@ -79,7 +79,7 @@ void MovingPlatform::update(float dt)
 			{
 				velocity = direction *speed *-1;
 				pos += velocity *dt;
-				if (Collision::distanceBetween(end, pos) > dist)
+				if (Collision::distanceBetween(end, pos) >= dist)
 				{
 					pos = start;
 				}

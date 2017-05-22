@@ -6,6 +6,11 @@ ItemManager::ItemManager(std::string filePath, SDL_Renderer *renderer)
 	loadItemData(filePath, renderer);
 }
 
+ItemManager::~ItemManager()
+{
+	itemTypesID.clear();
+}
+
 bool ItemManager::loadItemData(std::string filePath, SDL_Renderer *renderer)
 {
 
@@ -49,9 +54,7 @@ bool ItemManager::loadItemData(std::string filePath, SDL_Renderer *renderer)
 				
 
 
-				/*
-				WILL NEED TO GET ANIMATION DATA
-				*/
+				
 
 				Texture* itemSpriteSheet = new Texture(spritesheetPath, renderer);
 

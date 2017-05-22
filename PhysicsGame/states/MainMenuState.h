@@ -10,6 +10,7 @@
 #include "PauseMenuState.h"
 #include "ChooseLevelState.h"
 #include "ShowControlsState.h"
+#include "CreditsState.h"
 #include "../audio/SFXR.h"
 #include "../audio/MusicR.h"
 #include "../audio/audio.h"
@@ -85,5 +86,10 @@ protected:
 
 	Texture* controls;
 	Button * controlsBtn;
+	Button *creditsBtn;
+	Button *quitgamebtn;
+
+	Vec2 logoPosition;
+	Vec2 logoDimensions;
 
 };

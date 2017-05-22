@@ -102,7 +102,10 @@ bool MainMenuState::eventHandler()
 						//	pauseMenuButtons[i]->setSelected(false);
 					}
 				}
-
+				if (quitgamebtn->getSelected())
+				{
+					return true;
+				}
 
 				/*Utility::log(Utility::I, Utility::intToString(mouseX));
 				//sf->playAudio(0);
@@ -157,12 +160,21 @@ void MainMenuState::update(float dt)
 	
 	if (controlsBtn->getSelected())
 	{
+		controlsBtn->setIdle();
 		stateManager->addState(new ShowControlsState(stateManager, platform, dtmng));
+	}
+
+	if (creditsBtn->getSelected())
+	{
+		creditsBtn->setIdle();
+		stateManager->addState(new CreditsState(stateManager, platform, dtmng));
 	}
 }
 
 void MainMenuState::render()
 {
+	dtmng->getAssetManager()->getTexture("gamelogo")->pushSpriteToScreen(platform->getRenderer(), logoPosition, logoDimensions);
+
 	for (int i = 0; i < mainMenuButtons.size(); i++)
 	{
 		mainMenuButtons[i]->render(platform->getRenderer());
@@ -175,13 +187,20 @@ void MainMenuState::render()
 
 void MainMenuState::load()
 {
-	playTexture = new Texture("res/img/buttons/playBtn.png", platform->getRenderer());
+	logoPosition = Vec2(platform->getWindowSize().x / 2 - 334, 35.f);
+	logoDimensions = Vec2(668, 141);
+
+
 
 	//background
-	redPlay = new Button(playTexture, Vec2(60, 40), Vec2(250, 115), Vec2(0,0));
+	redPlay = new Button(dtmng->getAssetManager()->getTexture("playgamebtn"), Vec2(60, 140), Vec2(250, 100), Vec2(0,0));
 	controls = dtmng->getAssetManager()->getTexture("controls");
 
-	controlsBtn = new Button(playTexture, Vec2(60, 250), Vec2(250, 115), 0);
+	controlsBtn = new Button(dtmng->getAssetManager()->getTexture("controlsbtn"), Vec2(60, 240), Vec2(250, 100), 0);
+
+	creditsBtn = new Button(dtmng->getAssetManager()->getTexture("creditsbtn"), Vec2(60, 340), Vec2(250, 100), 0);
+
+	quitgamebtn = new Button(dtmng->getAssetManager()->getTexture("mmquit"), Vec2(60, 440), Vec2(250, 100), 0);
 
 	dtmng->getAudioManager()->getMusicByName("TitleScreen")->playAudio(-1);
 
@@ -189,10 +208,15 @@ void MainMenuState::load()
 
 	mainMenuButtons.push_back(redPlay);
 	mainMenuButtons.push_back(controlsBtn);
+	mainMenuButtons.push_back(creditsBtn);
+	mainMenuButtons.push_back(quitgamebtn);
 }
 
 void MainMenuState::unload()
 {
-	delete playTexture;
-	delete redPlay;
+	for (int i = 0; i < mainMenuButtons.size(); i++)
+	{
+		delete mainMenuButtons[i];
+	}
+
 }

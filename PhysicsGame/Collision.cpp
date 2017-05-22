@@ -263,11 +263,15 @@ void Collision::resolve(Manifold *m)
 		Vec2 tangent = rv - m->normal*dot;
 		Vec2 tnorm = tangent.normalize();
 
-		/*if (tnorm == Vec2(0, 1)
-		|| tnorm == Vec2(0, -1))
+		if (tnorm == Vec2(0, 1)
+		|| tnorm == Vec2(0, -1) )
 		{
-		return;
-		}*/
+			if (m->A->getEntName() == "Player" && m->B->getEntName() == "Tile")
+			{
+				return;
+			}
+			
+		}
 		//Utility::log(Utility::I, "Collision normal: X: " + Utility::floatToString(m->normal.x) + " Y: " + Utility::floatToString(m->normal.y));
 
 		Vec2 fictionv = tnorm * rv;

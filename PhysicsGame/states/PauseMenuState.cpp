@@ -131,7 +131,7 @@ bool PauseMenuState::eventHandler()
 				//pressing a key
 			case SDLK_ESCAPE:
 				
-				stateManager->popLastStateWithoutDelete();
+				stateManager->popLastState();
 				return false;
 				break;
 			}
@@ -178,14 +178,12 @@ void PauseMenuState::render()
 
 void PauseMenuState::load()
 {
-	resumeTexture = new Texture("res/img/buttons/resumeBtn.png", platform->getRenderer());
-	quitToMenuTexture = new Texture("res/img/buttons/quitmenuBtn.png", platform->getRenderer());
-	//quitToDesktopTexture = new Texture("res/img/buttons/quitdesktopBtn.png", platform->getRenderer());
-	mnubg = new Texture("res/img/menubg.png", platform->getRenderer());
+	resumeTexture = dtmng->getAssetManager()->getTexture("resumebtn");
+	
+	mnubg = dtmng->getAssetManager()->getTexture("pmenubg");
 
 	Utility::log(Utility::I, Utility::intToString(platform->getWindowSize().x));
 
-	
 
 	Vec2 btnSize = Vec2(320, 72);
 
@@ -193,7 +191,7 @@ void PauseMenuState::load()
 	
 
 	resumeBtn = new Button(resumeTexture, Vec2(xPos, 30), btnSize, Vec2(0,0));
-	quitMenuBtn = new Button(quitToMenuTexture, Vec2(xPos, 120), btnSize, Vec2(0, 0));
+	quitMenuBtn = new Button(dtmng->getAssetManager()->getTexture("levelselect"), Vec2(xPos, 120), btnSize, 0);
 	quitDesktopBtn = new Button(dtmng->getAssetManager()->getTexture("quittodesktop"), Vec2(xPos, 210), btnSize, Vec2(0, 0));
 	
 
@@ -205,5 +203,8 @@ void PauseMenuState::load()
 
 void PauseMenuState::unload()
 {
-
+	for (int i = 0; i < pauseMenuButtons.size(); i++)
+	{
+		delete pauseMenuButtons[i];
+	}
 }

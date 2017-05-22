@@ -3,6 +3,7 @@
 #include "../Entity.h"
 #include "CharacterType.h"
 #include "../MovingPlatform.h"
+#include "../../audio/AudioManager.h"
 
 /**
 @brief Creates all data for the character
@@ -127,7 +128,7 @@ public:
 	void setLocalVelocity(Vec2 lv);
 	Vec2 getLocalVelocity();
 
-	void jump();
+	void jump(Audio *jp);
 
 	void moveRight(float dt);
 	void moveLeft(float dt);
@@ -148,6 +149,22 @@ public:
 	void setAlive(bool a);
 
 	bool getAlive();
+
+	void setCarryingBody(bool cb);
+	void setCarryingBody(bool cb, Body* b);
+
+	bool getCarryingBody();
+
+	Body* getBodyCarrying();
+
+	void setOnBody(bool ob);
+	void setOnBody(bool ob, Body *b);
+
+	bool isOnBody();
+
+	Body* getBodyOnTopOf();
+
+
 
 private:
 	///Reference to CharacterType
@@ -230,4 +247,12 @@ private:
 	Entity* entityOn = NULL;
 
 	bool alive;
+
+	bool carryingBody = false;
+
+
+	bool onBody;
+	Body* bodyOnTopOf;
+	Body *bodyCarrying;
+
 };

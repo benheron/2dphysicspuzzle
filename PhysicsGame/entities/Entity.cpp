@@ -137,3 +137,7 @@ bool Entity::getApplyFriction()
 	return applyFriction;
 }
 
+std::string Entity::getEntName()
+{
+	return entName;
+}

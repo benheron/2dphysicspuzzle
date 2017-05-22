@@ -59,6 +59,15 @@ void Body::render(SDL_Renderer *renderer)
 }
 
 
+void Body::setCanCarry(bool c)
+{
+	canCarry = c;
+}
+
+bool Body::getCanCarry()
+{
+	return canCarry;
+}
 
 /*
 void Body::setRadius(float r)

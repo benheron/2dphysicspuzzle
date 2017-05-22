@@ -43,8 +43,13 @@ private:
 	//Texture *timeText;
 	//TTF_Font *font = NULL;
 
+	Text* levelIDText;
+	Text* completeText;
+
+	Text* fastestTime;
 	Text *timeText;
 
 	Texture* background;
 
+	Level *levelData;
 };

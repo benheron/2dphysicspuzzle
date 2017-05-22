@@ -69,6 +69,10 @@ public:
 
 	unsigned int getTime();
 
+	std::string getTimeString();
+
+	Text* getTimeText();
+
 protected:
 	bool running;
 
@@ -82,7 +86,6 @@ protected:
 
 	std::string elapsedTimeString;
 
-	TTF_Font *font = NULL;
 
 	Text* minText;
 	Text* secText;
@@ -91,5 +94,6 @@ protected:
 
 	Text* elapsedTimeText;
 
+	bool stopped = false;
 
 };

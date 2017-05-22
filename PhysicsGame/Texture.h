@@ -106,6 +106,15 @@ public:
 	void pushSpriteToScreen(SDL_Renderer* renderer, Vec2 pos);
 
 	/**
+	@brief Pushes the image to the Renderer at the XY Coordinates.
+	Only displays the source rectangle inputed.
+	@param renderer A pointer to the renderer.
+	@param pos The position of the image.
+	@param scale The dimensions of the image
+	*/
+	void pushSpriteToScreen(SDL_Renderer* renderer, Vec2 pos, Vec2 scale);
+
+	/**
 	@brief Pushes the image to the Renderer at the XY Coordinates. 
 	Only displays the source rectangle inputed.
 	@param renderer A pointer to the renderer.

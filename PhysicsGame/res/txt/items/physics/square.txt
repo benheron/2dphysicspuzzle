@@ -1,4 +1,4 @@
-res/img/square.png
+res/img/box.png
 square
 20
 20

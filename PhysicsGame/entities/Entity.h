@@ -119,7 +119,7 @@ public:
 	void setApplyFriction(bool af);
 	bool getApplyFriction();
 
-
+	std::string getEntName();
 
 	Vec2 velocity = Vec2(0, 0);
 
@@ -168,6 +168,8 @@ protected:
 	float bounciness = 0;
 
 	bool applyFriction = true;
+
+	std::string entName = "Entity";
 
 
 };

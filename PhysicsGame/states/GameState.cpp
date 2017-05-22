@@ -32,7 +32,11 @@ bool GameState::eventHandler()
 			return true;
 			break;
 
+		
+
 		case SDL_MOUSEBUTTONDOWN:
+
+
 			switch (events.button.button)
 			{
 			case SDL_BUTTON_LEFT:
@@ -47,13 +51,14 @@ bool GameState::eventHandler()
 
 							//Vec2 spv = pv - sv;
 							float dist = Collision::distanceBetween(pv, sv);
-							if (dist < 80)
+							if (dist < 90)
 							{
 								bodyPick = true;
 								bodyPickIndex = i;
 
 								squares[i]->setGravityOn(false);
 								squares[i]->velocity = Vec2(0, 0);
+								dtmng->getAudioManager()->getSFXByName("BodyPick")->playAudio(0);
 							}
 						}
 					}
@@ -61,7 +66,7 @@ bool GameState::eventHandler()
 				else {
 					if (bodyPickIndex != -1)
 					{
-						letBodyGo();
+						letBodyGo(true);
 					}
 					
 
@@ -77,7 +82,8 @@ bool GameState::eventHandler()
 			case SDLK_ESCAPE:
 				//do same as quit
 				
-					stateManager->addState(dtmng->getPauseMenuState());
+					//stateManager->addState(dtmng->getPauseMenuState());
+				stateManager->addState(new PauseMenuState(stateManager, platform, dtmng));
 					
 					//stateManager->changeState(new ChooseLevelState(stateManager, platform, dtmng));
 					esc = true;
@@ -205,7 +211,7 @@ bool GameState::eventHandler()
 				break;
 			
 			default:
-				Utility::log(Utility::I, Utility::intToString(events.key.keysym.sym));
+				//Utility::log(Utility::I, Utility::intToString(events.key.keysym.sym));
 				break;
 			}
 			break;
@@ -216,391 +222,6 @@ bool GameState::eventHandler()
 
 void GameState::update(float dt)
 {
-	/*player->update(dt);
-	currentMap->update(dt);
-	itesw->update(dt);
-	dd->update(dt);
-	Vec2 ppos = player->getPosition();
-	Vec2 pdim = player->getDimensions();
-
-	jumphitbox->setPosition(Vec2(ppos.x, ppos.y + pdim.y));
-	levelTime->update(dt);*/
-
-/*
-
-	ManifoldTile m3;
-	//squares
-	for (int i = 0; i < squares.size(); i++)
-	{
-		squares[i]->update(dt);
-
-		m3.A = squares[i];
-		m->A = squares[i];
-
-		Vec2 normal = 0;
-		float penetration;
-
-		for (int j = 0; j < squares.size(); j++)
-		{
-			
-			m->B = squares[j];
-			//Vec2 normal = 0;
-			//float penetration;
-
-			//check not comparing to self
-			if (squares[i] != squares[j])
-			{
-				if (Collision::boxBoxCollisionM(m))
-				{
-			//		Utility::log(Utility::I, "Collide with another square");
-					Collision::resolve(m);
-					Collision::correctPositions(m);
-				}
-			}
-		}
-
-		currentMap->checkCollideM3(&m3);
-
-
-		for (int j = 0; j < circles.size(); j++)
-		{
-
-			m->B = circles[j];
-			//Vec2 normal = 0;
-			//float penetration;
-
-			//check not comparing to self
-			if (Collision::circleCircleCollisionM(m))
-			{
-			//	Utility::log(Utility::I, "Collide with another circle");
-				Collision::resolve(m);
-				Collision::correctPositions(m);
-			}
-		}
-
-
-		m->B = player;
-
-
-		if (Collision::boxBoxCollisionM(m))
-		{
-			Collision::resolve(m);
-			Collision::correctPositions(m);
-			Utility::log(Utility::I, "Collide with player");
-		}
-
-		m->B = mp;
-
-		if (Collision::boxBoxCollisionM(m))
-		{
-			Collision::resolve(m);
-			Collision::correctPositions(m);
-		}
-
-		m->B = mp2;
-
-		if (Collision::boxBoxCollisionM(m))
-		{
-			Collision::resolve(m);
-			Collision::correctPositions(m);
-		}
-
-		m->B = dd;
-		if (Collision::boxBoxCollisionM(m))
-		{
-			Collision::resolve(m);
-			Collision::correctPositions(m);
-		}
-
-		//pressure pad
-		m->B = pp1;
-		if (Collision::boxBoxCollisionM(m))
-		{
-			Collision::resolve(m);
-			Collision::correctPositions(m);
-			if (m->normal == Vec2(0, 1))
-			{
-				pp1->setActivate(true);
-
-			}
-			else {
-				//pp1->setActivate(false);
-			}
-			
-		}
-		else {
-			//pp1->setActivate(false);
-		}
-
-		m->B = itesw;
-		if (Collision::boxBoxCollisionM(m))
-		{
-			float aVel = m->A->velocity.getLength();
-			if (aVel > 40)
-			{
-				itesw->activate();
-			}
-			Collision::resolve(m);
-			Collision::correctPositions(m);
-			
-		}
-
-
-
-
-
-		m->B = jumphitbox;
-		if (Collision::boxBoxCollisionM(m))
-		{
-			if (m->normal == Vec2(0, -1))
-			{
-				player->setOnFloor(true);
-				canJump = true;
-
-			}
-			
-		}
-		
-
-		if (squares[i]->getPosition().y > 540)
-		{
-			squares[i]->setPosition(Vec2(80, 170));
-			squares[i]->velocity = Vec2(0, 0);
-		}
-
-	}*/
-
-
-/*
-	//////
-	//circles
-	//////
-	for (int i = 0; i < circles.size(); i++)
-	{
-		circles[i]->update(dt);
-
-		Manifold *m = new Manifold();
-		m->A = circles[i];
-
-		Vec2 normal = 0;
-		float penetration;
-
-		for (int j = 0; j < circles.size(); j++)
-		{
-
-			m->B = circles[j];
-			//Vec2 normal = 0;
-			//float penetration;
-
-			//check not comparing to self
-			if (circles[i] != circles[j])
-			{
-				if (Collision::circleCircleCollisionM(m))
-				{
-				//	Utility::log(Utility::I, "Collide with another circle");
-					Collision::resolve(m);
-					Collision::correctPositions(m);
-				}
-			}
-		}
-
-		if (currentMap->checkCollideM2(m))
-		{
-		//	Utility::log(Utility::I, "Collide with tiles. Normal: X: " + Utility::floatToString(m->normal.x) + " Y: " + Utility::floatToString(m->normal.y) + " Penetration: " + Utility::floatToString(m->penetration) + " Velocity: X  " + Utility::floatToString(m->A->velocity.x) + " Velocity: Y  " + Utility::floatToString(m->A->velocity.y));
-			Collision::resolve(m);
-			Collision::correctPositions(m);
-
-
-			//m->A->velocity *= m->normal;
-
-
-		}
-
-		for (int j = 0; j < squares.size(); j++)
-		{
-
-			m->B = squares[j];
-			//Vec2 normal = 0;
-			//float penetration;
-
-			//check not comparing to self
-			if (Collision::boxBoxCollisionM(m))
-			{
-				//Utility::log(Utility::I, "Collide with another square");
-				Collision::resolve(m);
-				Collision::correctPositions(m);
-			}
-		}
-
-
-		
-		m->B = player;
-
-		
-
-		
-
-	}
-
-	m->B = player;
-
-
-	
-
-
-	m->A = jumphitbox;
-
-	m3.A = jumphitbox;
-
-	if (currentMap->checkCollideM(&m3))
-	{
-		if (m3.normal == Vec2(0, 1))
-		{
-			player->setOnFloor(true);
-			canJump = true;
-			Utility::log(Utility::I, "Can Jump");
-		}
-	}
-	m->A = player;
-
-	m3.A = player;
-
-	if (currentMap->checkCollideM3(&m3))
-	{
-		//Utility::log(Utility::I, "Collide with tiles. Normal: X: " + Utility::floatToString(m->normal.x) + " Y: " + Utility::floatToString(m->normal.y) + " Penetration: " + Utility::floatToString(m->penetration) + " Velocity: X  " + Utility::floatToString(m->A->velocity.x) + " Velocity: Y  " + Utility::floatToString(m->A->velocity.y));
-	}
-
-	currentMap->checkCollidePlayerTile(player);
-
-
-	Manifold mm;*/
-/*
-
-	
-	mm.B = mp;
-	mm.A = jumphitbox;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		if (mm.normal == Vec2(0, 1))
-		{
-			player->setOnFloor(true);
-			
-
-			player->setOnMovingPlatform(true, mp);
-			canJump = true;
-			Utility::log(Utility::I, "Moving platform jump");
-
-		}
-	}
-
-	
-
-
-
-	mm.A = player;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		Collision::resolve(&mm);
-		Collision::correctPositions(&mm);
-	}
-
-
-
-	mm.B = mp2;
-	mm.A = jumphitbox;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		if (mm.normal == Vec2(0, 1))
-		{
-			player->setOnFloor(true);
-
-
-			player->setOnMovingPlatform(true, mp2);
-			canJump = true;
-			Utility::log(Utility::I, "Moving platform jump");
-
-		}
-	}*/
-/*
-
-	mm.A = player;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		Collision::resolve(&mm);
-		Collision::correctPositions(&mm);
-	}
-
-	mm.B = dd;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		Collision::resolve(&mm);
-		Collision::correctPositions(&mm);
-	}
-*/
-
-
-
-
-
-
-/*
-
-	mm.B = itesw;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		Collision::resolve(&mm);
-		Collision::correctPositions(&mm);
-		if (mm.B->velocity.getLength() > 40)
-		{
-			itesw->activate();
-		}
-	}
-
-*/
-
-
-
-
-
-
-	/*
-	mm.B = pp1;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		Collision::resolve(&mm);
-		Collision::correctPositions(&mm);
-	}
-
-	mm.A = jumphitbox;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		if (mm.normal == Vec2(0, 1))
-		{
-			player->setOnFloor(true);
-			pp1->setActivate(true);
-			canJump = true;
-			Utility::log(Utility::I, "Can Jump");
-		}
-		else {
-			//pp1->setActivate(false);
-		}
-	}
-	else {
-		//pp1->setActivate(false);
-	}
-
-	mm.B = itesw;
-	if (Collision::boxBoxCollisionM(&mm))
-	{
-		if (mm.normal == Vec2(0, 1))
-		{
-			player->setOnFloor(true);
-		}
-	}*/
-
-
-	
-
 	currentMap->update(dt);
 
 
@@ -611,7 +232,11 @@ void GameState::update(float dt)
 	Vec2 movement = Vec2(0);
 
 	
-
+	if (player->getPosition().y < -30 || player->getPosition().y > 540
+		|| player->getPosition().x < 30 ||  player->getPosition().x > 960)
+	{
+		player->setAlive(false);
+	}
 	
 
 	//control
@@ -657,7 +282,7 @@ void GameState::update(float dt)
 			{
 				if (player->getCanJump() && player->getOnFloor())
 				{
-					player->jump();
+					player->jump(dtmng->getAudioManager()->getSFXByName("Jump"));
 				}
 
 
@@ -702,8 +327,7 @@ void GameState::update(float dt)
 			{
 				movement.x = 1;
 				player->setKeyMoveRight();
-				//player->velocity = Vec2(1, 0);
-				//power += 0.2 *dt;
+				
 			}
 			else {
 				//player->velocity.x = 0;
@@ -714,8 +338,7 @@ void GameState::update(float dt)
 
 				movement.y = -1;
 
-				//player->velocity = Vec2(0, 1);
-				//power += 0.2 *dt;
+			;
 			}
 
 			if (kDown)
@@ -788,31 +411,50 @@ void GameState::update(float dt)
 
 	if (bodyPick)
 	{
-		//move body with mouse
-		Vec2 plPos = player->getCentre();
-		Vec2 sqPos = squares[bodyPickIndex]->getCentre();
-		Vec2 diffM = mousePos - sqPos;
-
-		float distps = Collision::distanceBetween(plPos, sqPos);
-
-		if (distps < 80)
+		if (player->isOnBody() && player->getBodyOnTopOf() == squares[bodyPickIndex])
 		{
-			Vec2 diffN = diffM.normalize();
-			float distsm = Collision::distanceBetween(sqPos, mousePos);
-			//Utility::log(Utility::I, "Distance between mouse and body" + Utility::floatToString(distsm));
-
-			if (distsm < 115)
-			{
-				float power = distsm * 2;
-				squares[bodyPickIndex]->velocity = diffN * power;
-			}
-			else {
-				letBodyGo();
-			}
+			letBodyGo(true);
 		}
 		else {
-			letBodyGo();
+			player->setCarryingBody(true, squares[bodyPickIndex]);
+			//move body with mouse
+			Vec2 plPos = player->getCentre();
+			Vec2 sqPos = squares[bodyPickIndex]->getCentre();
+			Vec2 diffM = mousePos - sqPos;
+
+			Vec2 d = mousePos - squares[bodyPickIndex]->getDimensions() / 2;
+
+			float distps = Collision::distanceBetween(plPos, sqPos);
+
+		
+
+			Vec2 diffN = diffM.normalize();
+
+			if (!currentMap->checkNonBoxMouseCollide(mousePos))
+			{
+				if (distps < 90)
+				{
+
+					float distsm = Collision::distanceBetween(sqPos, mousePos);
+					//Utility::log(Utility::I, "Distance between mouse and body" + Utility::floatToString(distsm));
+
+
+					float power = distsm * 30;
+					squares[bodyPickIndex]->velocity = diffN * power;
+			
+				}
+				else {
+				
+					letBodyGo(true);
+				}
+			}
+			else {
+				letBodyGo(true);
+			}
+
+			
 		}
+		
 	}
 
 	/*if (dash && canDash)
@@ -845,16 +487,18 @@ void GameState::update(float dt)
 	{
 		playerDeadTime += dt;
 
+		if (!playedDeathSound)
+		{
+			dtmng->getAudioManager()->getSFXByName("Death")->playAudio(0);
+			playedDeathSound = true;
+		}
 
 		if (playerDeadTime > 1.5)
 		{
 			//boolCheat *retry = new boolCheat();
 			stateManager->addState(new OnDeathState(stateManager, platform, dtmng, retry));
 
-			if (retry)
-			{
-				stateManager->changeState(new GameState(stateManager, platform, dtmng, level));
-			}
+			
 		}
 		
 	}
@@ -862,21 +506,45 @@ void GameState::update(float dt)
 
 	if (!retry)
 	{
-		if (currentMap->getLevelComplete() && !writtenToFile)
+		if (currentMap->getLevelComplete())
 		{
-			unsigned int oldTime = level->getFastestTime();
-			unsigned int newTime = levelTime->getTime();
-			if (newTime < oldTime)
+			if (!playedLevelCompleteSound)
 			{
-				level->setFastestTime(levelTime->getTime());
+				dtmng->getAudioManager()->getMusicByName("Ingame")->stopAudio();
+				dtmng->getAudioManager()->getSFXByName("EndLevel")->playAudio(0);
+				playedLevelCompleteSound = true;
 			}
-			level->setComplete(true);
-			saveLevel();
-			writtenToFile = true;
-			stateManager->changeState(new ChooseLevelState(stateManager, platform, dtmng));
+			levelTime->stop();
+			playerFinishTime += dt;
+			if (!writtenToFile)
+			{
+				unsigned int oldTime = level->getFastestTime();
+				unsigned int newTime = levelTime->getTime();
+				if (newTime < oldTime)
+				{
+					level->setFastestTime(levelTime->getTime());
+				}
+				level->setComplete(true);
+				saveLevel();
+				writtenToFile = true;
+			}
+			else {
+				if (playerFinishTime > 1)
+				{
+					stateManager->addState(new OnWinState(stateManager, platform, dtmng, retry, levelTime, level));
+				}
+			}
+			
+
+			
+			//stateManager->changeState(new ChooseLevelState(stateManager, platform, dtmng));
 		}
 	}
-
+	if (retry)
+	{
+		stateManager->changeState(new GameState(stateManager, platform, dtmng, level));
+		return;
+	}
 	
 
 }
@@ -893,10 +561,10 @@ void GameState::render()
 	currentMap->render(platform->getRenderer());
 	levelTime->render(platform->getRenderer());
 
-	if (debugInfo)
+	/*if (debugInfo)
 	{
 		currentMap->renderDebug(platform->getRenderer(), red);
-	}
+	}*/
 
 	
 	
@@ -905,156 +573,11 @@ void GameState::render()
 void GameState::load()
 {
 
-	red = new Texture(platform->getRenderer(), { 255, 0 ,0 });
+	//red = new Texture(platform->getRenderer(), { 255, 0 ,0 });
 	throwStrength = 0;
 
 	currentMap = new MapRoom(dtmng->getMapManager(), dtmng->getTileTypeManager(), dtmng->getCreatureManager(), dtmng->getItemManager(), dtmng->getAssetManager(), level->getID());
-	/*m = new Manifold();
 
-	if (level->getID() == "M01")
-	{
-		mode = 1;
-	}
-	if (level->getID() == "M02")
-	{
-		mode = 2;
-	}
-	if (level->getID() == "M03")
-	{
-		mode = 3;
-	}
-	
-	white = new Texture(platform->getRenderer(), 255, 255, 255);
-
-	circleTexture = new Texture("res/img/circle.png", platform->getRenderer());
-	squareTexture = new Texture("res/img/square.png", platform->getRenderer());
-
-	pressPadB = new Texture("res/img/pressPadBottom.png", platform->getRenderer());
-	pressPadT = new Texture("res/img/pressPadTop.png", platform->getRenderer());
-
-	pressPad = new Texture("res/img/presspad.png", platform->getRenderer());
-
-	//currentMap = new MapRoom(dtmng->getMapManager(), 0, 0);
-	//currentMap->createRoom(dtmng->getMapManager(), dtmng->getTileTypeManager(), dtmng->getCreatureManager(), 0, 0, false, 0);
-
-	
-
-	player = new Character(Vec2(40, 170), dtmng->getCreatureManager()->getCharacterType("P1"));
-
-	player->mass = 1;
-	player->setGravityOn(true);
-
-
-
-
-	if (mode == 0)
-	{
-		//player = new Square(squareTexture, Vec2(40, 40), Vec2(20, 20));
-		//player->mass = 0.2;
-		//player->mass = 0;
-
-		box = new Square(squareTexture, Vec2(80, 80), Vec2(20, 20));
-
-		box->velocity = Vec2(20, 4);
-		box2 = new Square(squareTexture, Vec2(140, 80), Vec2(20, 20));
-
-		box3 = new Square(squareTexture, Vec2(70, 140), Vec2(20, 20));
-		box4 = new Square(squareTexture, Vec2(120, 120), Vec2(20, 20));
-		box4->velocity = Vec2(-60, 5);
-		box5 = new Square(squareTexture, Vec2(90, 210), Vec2(20, 20));
-
-		box6 = new Square(squareTexture, Vec2(145, 210), Vec2(20, 20));
-
-		squares.push_back(box);
-		squares.push_back(box2);
-		squares.push_back(box3);
-		squares.push_back(box4);
-		squares.push_back(box5);
-		squares.push_back(box6);
-
-
-		circ = new Circle(circleTexture, Vec2(400, 300), Vec2(32, 32));
-		circ2 = new Circle(circleTexture, Vec2(370, 350), Vec2(32, 32));
-		circ3 = new Circle(circleTexture, Vec2(425, 400), Vec2(32, 32));
-		circ4 = new Circle(circleTexture, Vec2(410, 450), Vec2(32, 32));
-		
-		circles.push_back(circ);
-		circles.push_back(circ2);
-		circles.push_back(circ3);
-		circles.push_back(circ4);
-	}
-	else if (mode == 1) {
-		//player = new Square(squareTexture, Vec2(40, 170), Vec2(20, 20));
-
-
-		//CharacterType *ct = dtmng->getCreatureManager()->getCharacterType("P0");
-		
-		//player->mass = 4;
-		//Vec2(80, 170)
-		box = new Square(squareTexture, Vec2(80, 100), Vec2(20, 20));
-		//box->setGravityOn(false);
-		squares.push_back(box);
-
-		Texture* t = new Texture("res/img/movplat.png", platform->getRenderer());
-
-		mp = new MovingPlatform(t, Vec2(170, 170), Vec2(300, 170), Vec2(64, 20), 60, false, true);
-
-		mp2 = new MovingPlatform(t, Vec2(270, 150), Vec2(400, 150), Vec2(64, 20), 60, false, true);
-		Texture *t3 = new Texture("res/img/door.png", platform->getRenderer());
-		dd = new Door(t3, Vec2(120, 130), Vec2(16, 32), false);
-		//496 for full pad
-		//Vec2(570, 504)
-
-		pp1 = new PressurePad(pressPad, Vec2(60, 170), Vec2(40, 17), dd);
-		pp1->mass = 0;
-
-		Texture *t2 = new Texture("res/img/itemswitch.png", platform->getRenderer());
-
-
-		
-		
-
-
-		itesw = new ItemSwitch(t2, Vec2(120, 170), Vec2(22, 28), mp2);
-
-		//exitm = new MapExit(white, Vec2(20, 170), Vec2(25, 25));
-	}
-	else if (mode == 2)
-	{
-
-		//player = new Square(squareTexture, Vec2(40, 450), Vec2(20, 20));
-		//player->mass = 4;
-
-		box = new Square(squareTexture, Vec2(120, 450), Vec2(20, 20));
-		box->setGravityOn(false);
-		box2 = new Square(squareTexture, Vec2(480, 170), Vec2(20, 20));
-		squares.push_back(box);
-		//squares.push_back(box2);
-
-		
-	}
-	else if (mode == 3)
-	{
-
-		//player = new Square(squareTexture, Vec2(40, 450), Vec2(20, 20));
-		//player->mass = 4;
-
-		box = new Square(squareTexture, Vec2(80, 450), Vec2(20, 20));
-		
-		squares.push_back(box);
-	}
-
-	Vec2 ppos = player->getPosition();
-	Vec2 pdim = player->getDimensions();
-*/
-
-	/*jumphitbox = new Square(Vec2(ppos.x, ppos.y + pdim.y), Vec2(pdim.x, 0.01));
-	jumphitbox->setGravityOn(false);
-*/
-
-
-	//currentMap = new MapRoom(dtmng->getMapManager(), 0, 0);
-	//currentMap->createRoom(dtmng->getMapManager(), dtmng->getTileTypeManager(), dtmng->getCreatureManager(), 0, 0, false, 0);
 
 
 	levelTime = new LevelStopwatch(40, Vec2(90, 40), dtmng->getTextImageManager());
@@ -1066,15 +589,29 @@ void GameState::load()
 	squares = currentMap->getSquares();
 	circles = currentMap->getCircles();
 	
-
 	backgroundTexture = new Texture("res/img/bg2.png", platform->getRenderer());
+
+	int a = level->getLevelIndex() % 4;
+	backgroundTexture = dtmng->getAssetManager()->getTexture("sky");
+	if (level->getLevelIndex() < 5)
+	{
+		backgroundTexture = dtmng->getAssetManager()->getTexture("sky");
+	} else
+		if (level->getLevelIndex() < 10)
+		{
+			backgroundTexture = dtmng->getAssetManager()->getTexture("cityscape");
+		}
+		else if (level->getLevelIndex() < 12)
+		{
+			backgroundTexture = dtmng->getAssetManager()->getTexture("cityscapenight");
+		}
+	
 }
 
 
 void GameState::saveLevel()
 {
 
-//	Utility::log(Utility::I, "Loading save data : " + "res/txt/savedata.txt");
 	remove("res/txt/newsavedata.txt");
 	std::ifstream dataFile("res/txt/savedata.txt");
 	std::ofstream newdataFile("res/txt/newsavedata.txt");
@@ -1119,12 +656,17 @@ void GameState::saveLevel()
 	rename("res/txt/newsavedata.txt", "res/txt/savedata.txt");
 }
 
-void GameState::letBodyGo()
+void GameState::letBodyGo(bool drop)
 {
 	squares[bodyPickIndex]->setGravityOn(true);
+	if (drop)
+	{
+		squares[bodyPickIndex]->velocity /= 10;
+	}
 	bodyPick = false;
 	bodyPickIndex = -1;
 	throwStrength = 0;
+	player->setCarryingBody(false);
 }
 
 void GameState::throwBody()
@@ -1142,13 +684,12 @@ void GameState::throwBody()
 	squares[bodyPickIndex]->velocity = diffN * throwStrength;
 	throwStrength = 0;
 
-	letBodyGo();
+	letBodyGo(false);
 }
 
 
 void GameState::unload()
 {
 	delete currentMap;
-	delete red;
-	delete backgroundTexture;
+	//delete backgroundTexture;
 }

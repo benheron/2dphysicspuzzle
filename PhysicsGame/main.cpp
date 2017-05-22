@@ -32,11 +32,13 @@ int main(int argc, char *argv[])
 
 	StateManager* manager = new StateManager();
 
+	DataManager *dtmng = new DataManager(platform, manager);
+
 	unsigned int lastTime = SDL_GetTicks();
 
 
 	//manager->addState(new GameState(manager, platform));
-	manager->addState(new LoadState(manager, platform));
+	manager->addState(new MainMenuState(manager, platform, dtmng));
 
 	bool done = false;
 
@@ -85,7 +87,7 @@ int main(int argc, char *argv[])
 			SDL_Delay((unsigned int)(((1.0f / 50.0f) - dt)*1000.0f));
 		}*/
 	}
-
+	delete dtmng;
 	delete manager;
 	delete platform;
 	SDL_Quit();

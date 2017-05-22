@@ -20,6 +20,8 @@ Tile::Tile(Vec2 pos, Vec2 dimensions, TileType *tileType) : Entity(pos, dimensio
 
 	staticFriction = 0.7;
 	dynamicFriction = 0.6;
+
+	entName = "Tile";
 }
 
 Tile::Tile(Texture* texture, Vec2 pos, Vec2 dimensions, TileType *tileType) : Entity(texture, pos, dimensions), tileType(tileType)

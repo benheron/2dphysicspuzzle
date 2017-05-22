@@ -29,7 +29,16 @@ DataManager::DataManager(Platform *platform, StateManager *stateManager)
 
 DataManager::~DataManager()
 {
-
+	delete ttmng;
+	delete cmng;
+	delete mmng;
+	delete sdmng;
+	delete imng;
+	delete amng;
+	delete timng;
+	delete kmng;
+	delete asmng;
+	delete pms;
 }
 
 MapManager* DataManager::getMapManager()

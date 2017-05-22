@@ -3,9 +3,6 @@
 #include "../DataManager.h"
 #include "ChooseLevelState.h"
 
-struct boolCheat {
-	bool a = false;
-};
 
 class OnDeathState : public State
 {
@@ -57,4 +54,10 @@ protected:
 	Vec2 mousePos;
 
 	bool &retry;
+
+	Vec2 bgPos;
+
+	Text* haveDied;
+
+	Vec2 deathFacePos;
 };

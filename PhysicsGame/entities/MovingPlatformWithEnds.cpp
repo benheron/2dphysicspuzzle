@@ -5,6 +5,11 @@ MovingPlatformWithEnds::MovingPlatformWithEnds(Texture* endsTexture, Texture* da
 {
 	mp = new MovingPlatform(movingPlatformTexture, start, end, dimens, speed, activated, reversing);
 
+
+
+
+	crushSquare = new Square(Vec2(start.x + 16, start.y + 5), dimensions / 4);
+
 	startPos = start + dimens/2 - (endsTexture->getDimensions()/2);
 	endPos = end + dimens/2 - (endsTexture->getDimensions() / 2);
 
@@ -33,12 +38,16 @@ MovingPlatformWithEnds::MovingPlatformWithEnds(Texture* endsTexture, Texture* da
 
 MovingPlatformWithEnds::~MovingPlatformWithEnds()
 {
-
+	delete mp;
+	delete crushSquare;
 }
 
 void MovingPlatformWithEnds::update(float dt)
 {
 	mp->update(dt);
+	Vec2 newCrushPos = Vec2(mp->getPosition().x + 16, mp->getPosition().y + 5);
+	crushSquare->setPosition(newCrushPos);
+
 }
 
 void MovingPlatformWithEnds::render(SDL_Renderer* renderer)
@@ -88,3 +97,14 @@ bool MovingPlatformWithEnds::checkPlatformCollision(Manifold *m)
 	}
 	return false;
 }
+
+bool MovingPlatformWithEnds::checkCrushPlayer(Manifold *m)
+{
+	m->B = crushSquare;
+	if (Collision::boxBoxCollisionM(m))
+	{
+		return true;
+	}
+	return false;
+}
+

@@ -2,7 +2,7 @@
 
 ShowControlsState::ShowControlsState(StateManager* manager, Platform *platform, DataManager *d) : State(manager, platform), dtmng(d)
 {
-
+	stateName = "ShowControlsState";
 }
 
 
@@ -32,7 +32,7 @@ bool ShowControlsState::eventHandler()
 
 			break;
 		case SDL_QUIT:
-			//return true;
+			return true;
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
@@ -42,7 +42,7 @@ bool ShowControlsState::eventHandler()
 
 				//left click
 			case SDL_BUTTON_LEFT:
-				
+
 				break;
 
 
@@ -52,7 +52,7 @@ bool ShowControlsState::eventHandler()
 			switch (events.button.button)
 			{
 			case SDL_BUTTON_LEFT:
-				
+
 				break;
 			}
 			break;
@@ -72,7 +72,7 @@ bool ShowControlsState::eventHandler()
 			{
 				//letting go of a key
 			default:
-				
+
 				break;
 			}
 			break;
@@ -89,14 +89,17 @@ void ShowControlsState::update(float dt)
 
 void ShowControlsState::render() {
 	controls->pushSpriteToScreen(platform->getRenderer(), 0);
+	dtmng->getAssetManager()->getTexture("escback")->pushSpriteToScreen(platform->getRenderer(), Vec2(843, 508));
 }
 
 void ShowControlsState::load()
 {
 	controls = dtmng->getAssetManager()->getTexture("controls");
 
+
 }
 void ShowControlsState::unload()
 {
 
 }
+

@@ -6,7 +6,7 @@ LevelGrid::LevelGrid(Vec2 pos, int columns, int rows, DataManager* dtmng, SDL_Re
 	theLevelIDs = smng->getTheLevelIDs();
 	numLevels = smng->getNumLevels();
 	//iconTexturesID = smng->getLevelIconFromID(levelID);
-	Vec2 iconDimens = Vec2(114, 125);
+	Vec2 iconDimens = Vec2(114, 175);
 	
 	for (int i = 0; i < rows; i++)
 	{

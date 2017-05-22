@@ -56,7 +56,7 @@ bool ChooseLevelState::eventHandler()
 
 			break;
 		case SDL_QUIT:
-			//return true;
+			return true;
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
@@ -129,7 +129,7 @@ bool ChooseLevelState::eventHandler()
 			{
 			
 			default:
-				Utility::log(Utility::I, Utility::intToString(events.key.keysym.sym));
+			//	Utility::log(Utility::I, Utility::intToString(events.key.keysym.sym));
 				break;
 			}
 			break;
@@ -149,33 +149,24 @@ void ChooseLevelState::update(float dt)
 void ChooseLevelState::render()
 {
 
-	/*for (int i = 0; i < levelButtons.size(); i++)
-	{
-		levelButtons[i]->render(platform->getRenderer());
-	}*/
-
-	/*for (int i = 0; i < levelIcons.size(); i++)
-	{
-	levelIcons[i]->render(platform->getRenderer());
-	}*/
-
+	
 	chooseStateTex->pushSpriteToScreen(platform->getRenderer(), Vec2((platform->getWindowSize().x / 2) - 192.f, 30.f), 0, Vec2(384, 41));
 
 
 
 	levelGrid->render(platform->getRenderer());
 
+	dtmng->getAssetManager()->getTexture("escback")->pushSpriteToScreen(platform->getRenderer(), Vec2(843, 508));
+
 }
 
 void ChooseLevelState::load()
 {
-	//generate-map button
-	//white texture
-	//white = new Texture(platform->getRenderer(), 255, 255, 255);
+	
 
 	chooseStateTex = new Texture("res/img/chooselevel.png", platform->getRenderer());
 
-	levelGrid = new LevelGrid(Vec2(50, 100), 5, 3, dtmng, platform->getRenderer());
+	levelGrid = new LevelGrid(Vec2(50, 100), 6, 3, dtmng, platform->getRenderer());
 
 	float lgx = (platform->getWindowSize().x / 2) -(levelGrid->getDimensions().x / 2);
 

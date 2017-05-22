@@ -610,6 +610,7 @@ bool MapRoom::getLevelComplete()
 
 void MapRoom::update(float dt)
 {
+	bool crush = false;
 
 	//update entities
 	player->update(dt);
@@ -639,6 +640,7 @@ void MapRoom::update(float dt)
 			if (m.normal == Vec2(0, 1))
 			{
 				player->setOnFloor(true);
+				
 			}
 		}
 	}
@@ -649,15 +651,33 @@ void MapRoom::update(float dt)
 	for (int i = 0; i < roomMovePlats.size(); i++)
 	{
 		roomMovePlats[i]->update(dt);
-
-		m.A = player;
-		//m.B = roomMovePlats[i];
-
-		if (roomMovePlats[i]->checkPlatformCollision(&m))
+		m.B = roomMovePlats[i]->getMovingPlatform();
+		if (player->getAlive())
 		{
-			Collision::resolve(&m);
-			Collision::correctPositions(&m);
+			m.A = player;
+			//m.B = roomMovePlats[i];
+
+			if (roomMovePlats[i]->checkPlatformCollision(&m))
+			{
+
+				if (m.normal == Vec2(0, -1))
+				{
+					if (roomMovePlats[i]->getMovingPlatform()->velocity.y > 0)
+					{
+						crush = true;
+					}
+
+				}
+
+				Collision::resolve(&m);
+				Collision::correctPositions(&m);
+
+
+			}
 		}
+		
+
+		
 
 		m.A = jumphitbox;
 		if (Collision::boxBoxCollisionM(&m))
@@ -723,7 +743,7 @@ void MapRoom::update(float dt)
 	
 
 	
-
+	bool playerOnBody = false;
 
 	//collision
 	
@@ -770,16 +790,55 @@ void MapRoom::update(float dt)
 			}
 		}
 
+		m.B = jumphitbox;
+		if (Collision::boxBoxCollisionM(&m))
+		{
+			if (m.normal == Vec2(0, -1))
+			{
+				player->setOnFloor(true);
+				player->setOnBody(true, squares[i]);
+				playerOnBody = true;
+			}
+
+
+		}
+
 
 		m.B = player;
 
 
 		if (Collision::boxBoxCollisionM(&m))
 		{
-			Collision::resolve(&m);
-			Collision::correctPositions(&m);
-			Utility::log(Utility::I, "Collide with player");
+			if (player->getCarryingBody())
+			{
+				if (player->getBodyCarrying() == squares[i])
+				{
+					squares[i]->velocity = 0;
+				}
+				else {
+					Collision::resolve(&m);
+					Collision::correctPositions(&m);
+				}
+				
+				/*if (player->getBodyOnTopOf() == squares[i])
+				{
+					squares[i]->velocity = 0;
+
+				}
+				else {
+					//Collision::resolve(&m);
+					//Collision::correctPositions(&m);
+				}*/
+				
+
+			}
+			else {
+				Collision::resolve(&m);
+				Collision::correctPositions(&m);
+				//	Utility::log(Utility::I, "Collide with player");
+			}
 		}
+		
 
 		for (int j = 0; j < roomPressurePads.size(); j++)
 		{
@@ -862,15 +921,8 @@ void MapRoom::update(float dt)
 
 
 
-		m.B = jumphitbox;
-		if (Collision::boxBoxCollisionM(&m))
-		{
-			if (m.normal == Vec2(0, -1))
-			{
-				player->setOnFloor(true);
-			}
-
-		}
+		
+		
 
 		//tile collision
 		mt.A = squares[i];
@@ -943,6 +995,14 @@ void MapRoom::update(float dt)
 	mt.A = player;
 	checkCollideM3(&mt);
 
+	player->setOnBody(playerOnBody);
+
+	if (player->getOnFloor() && crush)
+	{
+		player->setAlive(false);
+	}
+
+
 	m.A = player;
 	m.B = me;
 	if (Collision::boxBoxCollisionM(&m))
@@ -956,40 +1016,21 @@ void MapRoom::update(float dt)
 void MapRoom::render(SDL_Renderer* renderer)
 {
 
-	for (int i = 0; i < sentinels.size(); i++)
-	{
-		sentinels[i]->render(renderer);
-	}
+
 
 	for (unsigned int i = 0; i < roomItems.size(); i++)
 	{
 		roomItems[i]->render(renderer);
 	}
 
-	for (int i = 0; i < roomPressurePads.size(); i++)
-	{
-		roomPressurePads[i]->render(renderer);
-	}
-
-	for (int i = 0; i < roomItemSwitches.size(); i++)
-	{
-		roomItemSwitches[i]->render(renderer);
-	}
+	
 
 	for (int i = 0; i < roomDoors.size(); i++)
 	{
 		roomDoors[i]->render(renderer);
 	}
 
-	for (int i = 0; i < roomMovePlats.size(); i++)
-	{
-		roomMovePlats[i]->render(renderer);
-	}
-
-	for (int i = 0; i < grunts.size(); i++)
-	{
-		grunts[i]->render(renderer);
-	}
+	
 
 	
 
@@ -1013,6 +1054,22 @@ void MapRoom::render(SDL_Renderer* renderer)
 	}
 	me->render(renderer);
 
+	for (int i = 0; i < roomMovePlats.size(); i++)
+	{
+		roomMovePlats[i]->render(renderer);
+	}
+
+
+
+	for (int i = 0; i < grunts.size(); i++)
+	{
+		grunts[i]->render(renderer);
+	}
+	for (int i = 0; i < sentinels.size(); i++)
+	{
+		sentinels[i]->render(renderer);
+	}
+
 
 	//load in the creature data
 
@@ -1021,13 +1078,24 @@ void MapRoom::render(SDL_Renderer* renderer)
 		roomCreatures[i]->render(renderer);
 	}
 
+	for (int i = 0; i < roomPressurePads.size(); i++)
+	{
+		roomPressurePads[i]->render(renderer);
+	}
+
+	for (int i = 0; i < roomItemSwitches.size(); i++)
+	{
+		roomItemSwitches[i]->render(renderer);
+	}
 	
 	
 
 	//load in the player data
 
-	
-	player->render(renderer);
+	if (!levelComplete)
+	{
+		player->render(renderer);
+	}
 	
 
 
@@ -1102,7 +1170,7 @@ void MapRoom::addCreature(Vec2 p, CreatureType *ct)
 		if (nnp == roomCreatures[i]->getPosition())
 		{
 			sameAsAnother = true;
-			Utility::log(Utility::I, "Same as another creature");
+			//Utility::log(Utility::I, "Same as another creature");
 		}
 	}
 
@@ -1115,7 +1183,7 @@ void MapRoom::addCreature(Vec2 p, CreatureType *ct)
 			if (t != "XX" && np == roomTiles["O"][i][j]->getPosition())
 			{
 				sameAsAnother = true;
-				Utility::log(Utility::I, "Same as another tile");
+				//Utility::log(Utility::I, "Same as another tile");
 				
 			}
 		}
@@ -1125,10 +1193,10 @@ void MapRoom::addCreature(Vec2 p, CreatureType *ct)
 	{
 		roomCreatures.push_back(new Creature(creatureTexture, nnp, Vec2(13, 19), ct));
 		roomCreatureStrings[(y/32)*29 + (x/32)] = ct->getID();
-		Utility::log(Utility::I, "Not same as another creature or tile");
+		//Utility::log(Utility::I, "Not same as another creature or tile");
 	}
 
-	Utility::log(Utility::I, Utility::intToString(roomCreatures.size()));
+	//Utility::log(Utility::I, Utility::intToString(roomCreatures.size()));
 }
 
 
@@ -1577,7 +1645,7 @@ int MapRoom::checkCollidePlayerTile(Character *player)
 
 	if (damage)
 	{
-		player->setHit(true);
+		player->setAlive(false);
 	}
 
 
@@ -1813,4 +1881,36 @@ std::vector<Square*> MapRoom::getSquares()
 std::vector<Circle*> MapRoom::getCircles()
 {
 	return circles;
+}
+
+bool MapRoom::checkNonBoxMouseCollide(Vec2 mousePos)
+{
+	bool hit = false;
+
+	int px = floor(mousePos.x / 32);
+	int py = floor(mousePos.y / 32);
+
+	if (!roomTiles["O"][py][px]->haveBlankID() && !roomTiles["O"][py][px]->getClimbable())
+	{
+
+		hit = true;
+	}
+
+	for (int k = 0; k < roomMovePlats.size(); k++)
+	{
+		MovingPlatform* mp = roomMovePlats[k]->getMovingPlatform();
+
+		if (Collision::pointBoxCollision(mousePos, mp))
+		{
+			hit = true;
+		}
+	}
+
+	if (Collision::pointBoxCollision(mousePos, player))
+	{
+		hit = true;
+	}
+
+	return hit;
+
 }

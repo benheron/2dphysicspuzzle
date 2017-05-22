@@ -42,7 +42,10 @@ void Sentinel::update(float dt)
 	
 		break;
 	case Sentinel::passive:
-	
+		if (lockedOnTime > 0)
+		{
+			lockedOnTime -= dt;
+		}
 		break;
 	default:
 		laser->updateRayDir(laserDir);

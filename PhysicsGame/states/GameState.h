@@ -33,6 +33,7 @@
 #include "../entities/creatures/Sentinel.h"
 
 #include "OnDeathState.h"
+#include "OnWinState.h"
 
 //#include "..entities/creatures/Character.h"
 
@@ -98,7 +99,7 @@ protected:
 
 	void resolveCollision(Square* a, Square* b);
 
-	void letBodyGo();
+	void letBodyGo(bool drop);
 
 	void throwBody();
 
@@ -196,4 +197,9 @@ protected:
 	bool retry = false;
 
 	float playerDeadTime = 0;
+
+	float playerFinishTime = 0;
+
+	bool playedDeathSound = false;
+	bool playedLevelCompleteSound = false;
 };

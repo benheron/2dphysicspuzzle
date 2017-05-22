@@ -200,6 +200,26 @@ void Texture::pushSpriteToScreen(SDL_Renderer* renderer, Vec2 pos)
 	SDL_RenderCopy(renderer, textureData, &srcRect, &destRect);
 }
 
+void Texture::pushSpriteToScreen(SDL_Renderer* renderer, Vec2 pos, Vec2 scale)
+{
+	//Create the destination rectangle of the texture
+	SDL_Rect destRect;
+	destRect.x = (int)pos.x;
+	destRect.y = (int)pos.y;
+	destRect.w = (int)abs(scale.x);
+	destRect.h = (int)abs(scale.y);
+
+	//Create the source rectangle of the texture
+	SDL_Rect srcRect;
+	srcRect.x = 0;
+	srcRect.y = 0;
+	srcRect.w = (int)dimensions.x;
+	srcRect.h = (int)dimensions.y;
+
+	//Copy the texture to the renderer at the destination rectangle
+	SDL_RenderCopy(renderer, textureData, &srcRect, &destRect);
+}
+
 void Texture::pushSpriteToScreen(SDL_Renderer* renderer, Vec2 pos, Vec2 spritePos, Vec2 spriteDimensions)
 {
 	//Create the destination rectangle of the texture

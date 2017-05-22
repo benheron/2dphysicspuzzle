@@ -21,6 +21,9 @@ public:
 	void setComplete(bool c);
 	bool hasComplete();
 
+	void setLevelIndex(int i);
+	int getLevelIndex();
+
 protected:
 	std::string ID;
 	RoomTemplate *rt;
@@ -28,4 +31,5 @@ protected:
 	unsigned int fastestTime;
 	int numSecrets;
 	bool complete;
+	int levelIndex;
 };

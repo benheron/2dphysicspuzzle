@@ -31,6 +31,8 @@ public:
 
 	bool checkPlatformCollision(Manifold *m);
 
+	bool checkCrushPlayer(Manifold *m);
+
 protected:
 	MovingPlatform* mp;
 	Texture* endsTexture;
@@ -44,5 +46,7 @@ protected:
 	Vec2 endPos;
 	
 	std::vector<Vec2> dashPos;
+
+	Square *crushSquare;
 
 };

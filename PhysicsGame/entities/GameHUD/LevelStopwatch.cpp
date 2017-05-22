@@ -10,8 +10,6 @@ LevelStopwatch::LevelStopwatch(Vec2 pos, Vec2 dimensions, TextImageManager *timn
 	elapsedTime = 0;
 
 
-	font = TTF_OpenFont("res/fonts/ariblk.ttf", 20);
-
 
 	//Text *minText = new Text(pos, dimensions, "Arial", 32, "00", timng);
 	//Text *secText = new Text(pos, dimensions, "Arial", 32, "00", timng);
@@ -30,7 +28,6 @@ LevelStopwatch::LevelStopwatch(Texture* texture, Vec2 pos, Vec2 dimensions) : En
 	now = startTime;
 	lastTime = SDL_GetTicks();
 	elapsedTime = 0;
-	font = TTF_OpenFont("res/fonts/ariblk.ttf", 20);
 }
 
 
@@ -40,58 +37,59 @@ LevelStopwatch::LevelStopwatch(Texture* texture, Vec2 pos, Vec2 dimensions, Vec2
 	now = startTime;
 
 	elapsedTime = 0;
-	font = TTF_OpenFont("res/fonts/ariblk.ttf", 20);
 }
 
 LevelStopwatch::~LevelStopwatch()
 {
-
+	delete elapsedTimeText;
 }
 
 void LevelStopwatch::update(float dt)
 {
-	//now = SDL_GetTicks();
-	//elapsedTime += now - lastTime;
 
-	elapsedTime += dt * 1000;
-
-	lastTime = now;
-
-	int min = (elapsedTime / 1000) / 60;
-	int sec = (elapsedTime / 1000) % 60;
-	int mil = elapsedTime % 1000;
-
-	std::string stringMin = min < 10 ? "0" + Utility::intToString(min) : Utility::intToString(min);
-	std::string stringSec = sec < 10 ? "0" + Utility::intToString(sec) : Utility::intToString(sec);
-	std::string stringMil;
-	
-	if (mil < 10)
+	if (!stopped)
 	{
-		stringMil = "00" + Utility::intToString(mil);
+		elapsedTime += dt * 1000;
 
-	}
-	else if (mil < 100)
-	{
-		stringMil = "0" + Utility::intToString(mil);
-	}
-	else {
-		stringMil = Utility::intToString(mil);
-	}
+		lastTime = now;
 
+		int min = (elapsedTime / 1000) / 60;
+		int sec = (elapsedTime / 1000) % 60;
+		int mil = elapsedTime % 1000;
 
-	elapsedTimeString = stringMin + " : " + stringSec + " : " + stringMil;
+		std::string stringMin = min < 10 ? "0" + Utility::intToString(min) : Utility::intToString(min);
+		std::string stringSec = sec < 10 ? "0" + Utility::intToString(sec) : Utility::intToString(sec);
+		std::string stringMil;
 
-	std::string curDisplayTime = elapsedTimeText->getText();
-	for (int i = 0; i < elapsedTimeString.length(); i++)
-	{
-		std::string cdt = curDisplayTime.substr(i, 1);
-		std::string ets = elapsedTimeString.substr(i, 1);
-
-		if (cdt != ets)
+		if (mil < 10)
 		{
-			elapsedTimeText->changeCharacter(i, elapsedTimeString.substr(i, 1));
+			stringMil = "00" + Utility::intToString(mil);
+
+		}
+		else if (mil < 100)
+		{
+			stringMil = "0" + Utility::intToString(mil);
+		}
+		else {
+			stringMil = Utility::intToString(mil);
+		}
+
+
+		elapsedTimeString = stringMin + " : " + stringSec + " : " + stringMil;
+
+		std::string curDisplayTime = elapsedTimeText->getText();
+		for (int i = 0; i < elapsedTimeString.length(); i++)
+		{
+			std::string cdt = curDisplayTime.substr(i, 1);
+			std::string ets = elapsedTimeString.substr(i, 1);
+
+			if (cdt != ets)
+			{
+				elapsedTimeText->changeCharacter(i, elapsedTimeString.substr(i, 1));
+			}
 		}
 	}
+	
 	
 }
 
@@ -112,12 +110,12 @@ void LevelStopwatch::render(SDL_Renderer *renderer)
 
 void LevelStopwatch::stop()
 {
-
+	stopped = true;
 }
 
 void LevelStopwatch::start()
 {
-
+	stopped = false;
 }
 
 bool LevelStopwatch::isRunning()
@@ -128,4 +126,14 @@ bool LevelStopwatch::isRunning()
 unsigned int LevelStopwatch::getTime()
 {
 	return elapsedTime;
+}
+
+std::string LevelStopwatch::getTimeString()
+{
+	return elapsedTimeString;
+}
+
+Text* LevelStopwatch::getTimeText()
+{
+	return elapsedTimeText;
 }

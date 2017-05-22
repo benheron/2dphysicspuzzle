@@ -1,6 +1,6 @@
 #include "LevelIcon.h"
 
-LevelIcon::LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Level *levelData, SDL_Renderer *renderer, TextImageManager *timng, Texture*bg) : Button(pos, dimensions), background(bg)
+LevelIcon::LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Level *levelData, SDL_Renderer *renderer, TextImageManager *timng, Texture*bg) : Button(pos, dimensions), background(bg), levelData(levelData)
 {
 	levelImage = li;
 	imgSize = textSize;
@@ -43,7 +43,7 @@ LevelIcon::LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Leve
 
 	imgPos = Vec2(imgX, imgY);
 
-	int timeX = pos.x + dimensions.x / 2;// -timeScale.x / 2;
+	int timeX = pos.x + dimensions.x / 2;
 	int timeY = imgPos.y + imgSize.y + 5;
 	timePos = Vec2(timeX, timeY);
 
@@ -53,14 +53,19 @@ LevelIcon::LevelIcon(Vec2 pos, Vec2 dimensions, Texture* li, Vec2 textSize, Leve
 
 	//timeText = new Texture(renderer, levelTime, font, { 255,255,255 });
 
-	timeText = new Text(timePos, 2, "Arial", 20, levelTime, timng);
+	timeText = new Text(Vec2(timePos.x, timePos.y + 45), 2, "Arial", 20, levelTime, timng);
 
 	timeText->setAlign(centreAlign);
 
 
+	fastestTime = new Text(Vec2(timePos.x, timePos.y + 25), 2, "Arial", 20, "Fastest Time:", timng);
+	fastestTime->setAlign(centreAlign);
 
+	levelIDText = new Text(timePos, 2, "Arial", 20, levelData->getID(), timng);
+	levelIDText->setAlign(centreAlign);
 
-		
+	completeText = new Text(Vec2(timePos.x, timePos.y + 75), 2, "Arial", 20, "Complete!", timng);
+	completeText->setAlign(centreAlign);
 }
 
 LevelIcon::~LevelIcon()
@@ -95,7 +100,15 @@ void LevelIcon::render(SDL_Renderer* renderer)
 
 	levelImage->pushSpriteToScreen(renderer, imgPos, Vec2(0, 0), imgSize);
 	//timeText->renderText(renderer, timePos, timeScale);
-	timeText->render(renderer);
+	levelIDText->render(renderer);
+	fastestTime->render(renderer);
+	
+
+	if (levelData->hasComplete())
+	{
+		completeText->render(renderer);
+		timeText->render(renderer);
+	}
 
 	
 
@@ -111,4 +124,7 @@ void LevelIcon::changeIconPosition(Vec2 cip)
 	imgPos += cip;
 	pos += cip;
 	timeText->changeTextPosition(cip);
+	fastestTime->changeTextPosition(cip);
+	levelIDText->changeTextPosition(cip);
+	completeText->changeTextPosition(cip);
 }
